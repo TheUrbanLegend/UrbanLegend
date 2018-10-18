@@ -65,8 +65,8 @@ export default new Vuex.Store({
         window.ScatterJS = null
 
         const requiredFields = { accounts: [network] }
-        const id = await state.scatter.getIdentity(requiredFields)
-        commit('setIdentity', id)
+        await state.scatter.getIdentity(requiredFields)
+        // commit('setIdentity', id)
       } catch (err) {
         err && console.log(err)
         alert('Error getting scatter instance')
@@ -79,7 +79,7 @@ export default new Vuex.Store({
         })
     },
     setIdentity ({ commit, dispatch }, identity) {
-      commit('setIdentity', identity)
+      // commit('setIdentity', identity)
       dispatch('updateBalance')
     }
   }
