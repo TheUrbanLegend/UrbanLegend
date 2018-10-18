@@ -1,5 +1,9 @@
 # urban-legend
 
+## memo
+
+Intended to be the next EOSIO-Related-FE-Scaffold for the projects in the future right now.
+
 ## Project setup
 ```
 yarn install
