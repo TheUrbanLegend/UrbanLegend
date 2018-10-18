@@ -1,18 +1,24 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <section class="hero">
+      <h1 class="title"> EOSJS 2 Demo with ScatterJS-Core </h1>
+    </section>
+    <!-- demo for eosjs2 -->
+    <button class="button" @click="transferMoney"> Transfer EOS to Frank </button>
+    <button class="button" @click="callContract"> Simple Contract Call </button>
+    <button class="button" @click="signOnMsg"> Request Signature on certain message </button>
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
 
 export default {
-  name: 'home',
-  components: {
-    HelloWorld
+  name: "home",
+  methods: {
+    transferMoney() {},
+    callContract() {},
+    signOnMsg() {}
   }
-}
+};
 </script>
