@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "buefy": "^0.7.0",
+    "eosjs": "^20.0.0-beta1",
     "scatterjs-core": "^2.3.4",
     "scatterjs-plugin-eosjs2": "^1.1.5",
     "vue": "^2.5.17",
