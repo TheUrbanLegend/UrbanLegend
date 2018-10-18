@@ -8,9 +8,25 @@
   </div>
 </template>
 
+<script>
+import { mapActions } from 'vuex'
+
+// Don't forget to tell ScatterJS which plugins you are using.
+
+export default {
+  name: 'App',
+  methods: {
+    ...mapActions(['initScatter'])
+  },
+  created () {
+    this.initScatter()
+  }
+}
+</script>
+
 <style>
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
