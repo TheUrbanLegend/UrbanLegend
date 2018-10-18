@@ -14,11 +14,11 @@
 // @ is an alias to /src
 
 export default {
-  name: "home",
+  name: 'home',
   methods: {
-    transferMoney() {},
-    callContract() {},
-    signOnMsg() {}
+    transferMoney () {},
+    callContract () {},
+    signOnMsg () {}
   }
-};
+}
 </script>
