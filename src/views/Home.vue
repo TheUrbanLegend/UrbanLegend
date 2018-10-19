@@ -11,32 +11,25 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
-import { transferToken } from "@/blockchain";
+import { mapState } from 'vuex'
+import { transferToken } from '@/blockchain'
 // @ is an alias to /src
 
-const eosTokenDetails = {
-  contract: "eosio.token",
-  symbol: "EOS",
-  memo: "Donate to Frank Wei",
-  decimals: 4
-};
-
 export default {
-  name: "home",
+  name: 'home',
   methods: {
-    async transferMoney() {
+    async transferMoney () {
       await transferToken({
-        to: "yabukinanako",
-        memo: "Peropero",
-        amount: "0.0001"
-      });
+        to: 'yabukinanako',
+        memo: 'Peropero',
+        amount: '0.0001'
+      })
     },
-    callContract() {},
-    signOnMsg() {}
+    callContract () {},
+    signOnMsg () {}
   },
   computed: {
-    ...mapState(["eos", "scatter"])
+    ...mapState(['eos', 'scatter'])
   }
-};
+}
 </script>
