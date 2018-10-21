@@ -1,23 +1,49 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Home from './views/Home.vue'
+import diceGame from './components/dice/game.vue';
+import blackJackGame from './components/blackJack/game.vue';
+import OTCView from './components/otc';
+import slot from './components/slot/slot.vue'
 
 Vue.use(Router)
 
 export default new Router({
   routes: [
     {
-      path: '/',
-      name: 'home',
-      component: Home
+        name: 'Home',
+        path: '/',
+        redirect: {
+            name: 'Dice'
+        }
     },
     {
-      path: '/about',
-      name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (about.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import(/* webpackChunkName: "about" */ './views/About.vue')
+        name: 'OTCEOS',
+        path: '/otc',
+        redirect: {
+            name: 'OTC', params: {
+                tokenContract: 'eosio.token',
+                tokenSymbol: 'EOS'
+            }
+        }
+    },
+    {
+        name: 'OTC',
+        path: '/otc/:tokenContract/:tokenSymbol',
+        component: OTCView,
+    },
+    {
+        name: 'BlackJack',
+        path: '/blackjack',
+        component: blackJackGame,
+    },
+    {
+        name: 'Dice',
+        path: '/dice',
+        component: diceGame,
+    },{
+       name: 'Slot',
+        path: '/slot',
+        component:slot
     }
-  ]
+],
 })

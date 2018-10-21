@@ -1,66 +1,78 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
+    <vip-menu></vip-menu>
+    <div id="game">
+      <router-view />
     </div>
-    <router-view/>
     <footer>
-      <div class="info">
-      Great products and services don’t just happen. 
-      Behind them lies a development process that starts with careful consideration 
-      of market needs, the competitive environment and company resources.
+      <div class="socials">
+        <a href="" class="socialBtn Reddit">
+          <img src="./assets/images/Social/reddit_L@2x.png" alt=""></a>
+        <a href="" class="socialBtn Twitter">
+          <img src="./assets/images/Social/twitter_L@2x.png" alt=""></a>
+        <a href="" class="socialBtn Discord">
+          <img src="./assets/images/Social/Discord@2x.png" alt=""></a>
+        <a href="" class="socialBtn Medium">
+          <img src="./assets/images/Social/Medium@2x.png" alt=""></a>
+      </div>
+      <div class="warmly-warning">
+        <p>
+          合理安排游戏时间，请勿过度沉迷
+        </p>
+        <p>
+          Copyright ©️ 2018 HappyEOS. All Right Reserved.
+        </p>
+
       </div>
     </footer>
   </div>
 </template>
 
 <script>
-import { mapActions } from 'vuex'
-
-// Don't forget to tell ScatterJS which plugins you are using.
+import { mapActions } from "vuex";
+import menu from "./components/menu.vue";
 
 export default {
-  name: 'App',
-  methods: {
+  components: {
+    "vip-menu": menu
+  },
+    methods: {
     ...mapActions(['initScatter'])
   },
   created () {
     this.initScatter()
-  }
-}
+  },
+  data() {
+    return {
+      store: store.store
+    };
+  },
+};
 </script>
 
 <style>
 #app {
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  /* text-align: center; */
-  color: #2c3e50;
+  font-family: Poppins, sans-serif;
 }
-#nav {
-  padding: 30px;
-}
-
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
+#game {
+  background:rgba(6,19,20,1);;
+  background-size: 100%;
+  background-repeat: repeat repeat;
+  display: flex;
+  flex-direction: column;
+  font-weight: 600;
+  letter-spacing: 0.5px;
 }
 footer {
-  background: #20142A;
-  height: 350px;
+  padding: 1rem 1rem;
   text-align: center;
-  padding: 70px;
+  color: #FFFFFF;
+  background: rgba(6, 19, 20, 1);
 }
-footer .info {
-  background: url('/static/img/footer.png');
-  background-size: cover;
-  color: #00FF76;
-  font-size: 2rem;
+.socialBtn {
+  border-radius: 100%;
+}
+.socialBtn img {
+  width: 50px;
 }
 </style>
