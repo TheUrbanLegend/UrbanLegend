@@ -47,7 +47,7 @@ export default {
           end: 100
         }
       return {
-        store: store.store,
+        
         amount: 0,
         chartData: {
           columns: ['time', 'open', 'close', 'lowest', 'highest'],

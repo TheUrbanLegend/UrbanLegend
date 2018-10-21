@@ -120,7 +120,7 @@
 </template>
 
 <script>
-import { mapState, mapActions, mapGetters } from "vuex";
+import { mapState, mapActions, mapGetters,mapMutations } from "vuex";
 import Chance from "chance";
 import Clipboard from "clipboard";
 import ElDropdownItem from "../../node_modules/element-ui/packages/dropdown/src/dropdown-item";
@@ -141,7 +141,8 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['account']),
+    ...mapGetters(["account"]),
+    ...mapState(["lang"]),
     refUrl: function() {
       return `${window.location.origin}?ref=${(this.account &&
         this.account.name) ||
@@ -152,7 +153,8 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['forgetIdentity', 'initIdentity']),
+    ...mapActions(["forgetIdentity", "initIdentity"]),
+    ...mapMutations(['changeLang']),
     handleMenuClick(val) {
       this.$router.push({ name: val });
     },
@@ -160,8 +162,7 @@ export default {
       this.changeNetwork(val);
     },
     changeLang(lang) {
-      this.lang = lang;
-      localStorage.setItem("lang", this.lang);
+      localStorage.setItem("lang", lang);
       this.$i18n.locale = this.lang;
     },
     navigate(brand) {

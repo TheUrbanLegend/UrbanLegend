@@ -31,7 +31,6 @@ export default {
   data() {
     return {
       logs: [],
-      store: store.store
     };
   },
   created() {

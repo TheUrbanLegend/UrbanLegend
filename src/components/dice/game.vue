@@ -70,17 +70,17 @@
                 <el-col :span="8" class="account-info-section">
                     <div class="account-container">
                         <img class="navbar-coin" src="../../assets/eos-logo.png">
-                        <span class="display-text">{{store.eos.balance}}</span>
+                        <span class="display-text">{{balance.eos}}</span>
                     </div>
                 </el-col>
                 <el-col :span="8" class="account-info-section">
-                  <el-button type="primary" class="login-button" @click="initIdentity()" v-if="!store.account">{{$t('LOGIN')}}</el-button>
+                  <el-button type="primary" class="login-button" @click="initIdentity()" v-if="!account">{{$t('LOGIN')}}</el-button>
                   <el-button type="primary" class="login-button" @click="roll()" v-else v-loading="loading">{{$t('ROLL DICE')}}</el-button>
                 </el-col>
                 <el-col :span="8" class="account-info-section">
                     <div class="account-container">
                         <img class="navbar-coin" src="../../assets/HPY_Token.png">
-                        <span class="display-text">{{store.hpy.balance}}</span>
+                        <span class="display-text">{{balance.hpy}}</span>
                         <i class="el-icon-question" @click="isShowBetDialog = !isShowBetDialog" style="cursor: pointer;"></i>
                     </div>
                 </el-col>
@@ -93,11 +93,11 @@
         </div>
 
         <!-- 买卖token及K线 -->
-        <token-display :code="'happyeosslot'" :game="'dice'" :symbol="'hpy'"></token-display>
+        <!-- <token-display :code="'happyeosslot'" :game="'dice'" :symbol="'hpy'"></token-display> -->
         <!-- <token-display :code="'dicemaster11'" :game="'dice'" :symbol="'dmt'"></token-display> -->
 
         <!-- log -->
-        <dice-log></dice-log>
+        <!-- <dice-log></dice-log> -->
 
         <!-- 弹出 -->
         <el-dialog
@@ -114,17 +114,17 @@
 </template>
 
 <script>
-import tokenDisplay from '../../components/token/token.vue';
+import { mapState, mapActions, mapMutations, mapGetters } from "vuex";
+// import tokenDisplay from '@/components/token/token.vue';
 import log from './log.vue';
 
 export default {
     components: {
-      'token-display': tokenDisplay,
+      // 'token-display': tokenDisplay,
       'dice-log': log,
     },
     data() {
       return {
-        store: store.store,
         range: 50,
         betAmount: 1,
         isShowBetDialog: false,
@@ -133,6 +133,8 @@ export default {
       };
     },
     computed: {
+      ...mapState(['eos', 'scatter', 'balance', 'seed']),
+      ...mapGetters(['account']),
       payOnWin: function() {
         if (this.choose === 'small') {
           return Math.floor(98 / this.range * this.betAmount * 10000) / 10000;
@@ -158,30 +160,31 @@ export default {
       }
     },
     methods: {
+      ...mapActions(['updateBalance']),
       amountTimes(data) {
         this.betAmount = this.betAmount * data;
-        if(this.betAmount > this.store.eos.balance) {
-          this.betAmount = this.store.eos.balance;
+        if(this.betAmount > this.eos.balance) {
+          this.betAmount = this.eos.balance;
         }
       },
       amountMax() {
-        this.betAmount = this.store.eos.balance;
+        this.betAmount = this.eos.balance;
       },
       changeBetAmount(data) {
         this.betAmount = Math.floor(this.betAmount * 10000) / 10000;
       },
       roll: function() {
         this.loading = true;
-        let memo = `bet ${this.choose === 'small' ? this.range + 100 : this.range} ${this.store.seed}`;
-        const referral = this.store.referral;
+        let memo = `bet ${this.choose === 'small' ? this.range + 100 : this.range} ${this.seed}`;
+        // const referral = this.referral;
         if (referral) {
           memo += ` ${referral}`;
         }
-        this.store.scatter.transfer(this.store.account.name, "happyeosdice", `${this.betAmount.toFixed(4)} EOS`, memo)
+        this.scatter.transfer(this.account.name, "happyeosdice", `${this.betAmount.toFixed(4)} EOS`, memo)
           .then(() => {
             // 轮询查找结果
             const r = setInterval(() => {
-              this.store.scatter.getTableRows(true, "happyeosdice", this.store.account.name, "result", "0").then((data) => {
+              this.scatter.getTableRows(true, "happyeosdice", this.account.name, "result", "0").then((data) => {
                 const ans = data.rows[0].roll_number;
                 // roll点值为0-99
                 if (ans < 100) {
@@ -206,14 +209,14 @@ export default {
           message: this.$t('success_message', [ans, this.payout * this.betAmount]),
           type: 'success',
         });
-        store.updateBalance();
+        updateBalance();
       },
       roll_fail: function(ans) {
         this.$notify.error({
           title: this.$t('You fail'),
           message: this.$t('fail_message', [ans, this.payout * this.betAmount]),
         });
-        store.updateBalance();
+        updateBalance();
       }
     }
 }

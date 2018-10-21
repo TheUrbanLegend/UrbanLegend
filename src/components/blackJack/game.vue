@@ -56,7 +56,7 @@
                 <el-col :span="8" class="account-info-section">
                     <div class="account-container">
                         <img class="navbar-coin" src="../../assets/eos-logo.png">
-                        <span class="display-text">{{store.eos.balance}}</span>
+                        <span class="display-text">{{balance.eos}}</span>
                     </div>
                 </el-col>
                 <el-col :span="8" class="account-info-section">
@@ -94,6 +94,7 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 import Deck from 'deck-of-cards';
 import Chance from 'chance';
 import utils from '../../utils.js';
@@ -101,7 +102,7 @@ import utils from '../../utils.js';
 export default {
     data() {
       return {
-        store: store.store,
+        
         betAmount: 1,
         isShowBetDialog: false,
         loading: false,
@@ -112,6 +113,7 @@ export default {
       };
     },
     computed: {
+      ...mapState(['balance']),
       payOnWin: function() {
         return '???';
       },
@@ -134,12 +136,12 @@ export default {
     methods: {
       amountTimes(data) {
         this.betAmount = this.betAmount * data;
-        if(this.betAmount > this.store.eos.balance) {
-          this.betAmount = this.store.eos.balance;
+        if(this.betAmount > this.balance.eos) {
+          this.betAmount = this.balance.eos
         }
       },
       amountMax() {
-        this.betAmount = this.store.eos.balance;
+        this.betAmount = this.balance.eos
       },
       changeBetAmount(data) {
         this.betAmount = Math.floor(this.betAmount * 10000) / 10000;

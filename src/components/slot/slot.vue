@@ -185,7 +185,7 @@ export default {
   components: { ElButton },
   data() {
     return {
-      store: store.store,
+      
       requiredFields: null,
       eos: null,
       account: null,

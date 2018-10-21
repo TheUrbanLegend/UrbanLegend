@@ -58,7 +58,7 @@ export default {
   },
   data() {
     return {
-      store: store.store,
+      
       loading: false,
       choose: "small",
       customTokenForm: {},

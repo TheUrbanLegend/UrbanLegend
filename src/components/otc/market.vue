@@ -25,7 +25,7 @@ export default {
   props: ['currentToken'],
   data() {
     return {
-      store: store.store,
+      
       ordersList: [],
     };
   },

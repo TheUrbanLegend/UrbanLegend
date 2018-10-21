@@ -30,7 +30,7 @@
 <script>
 export default {
     data: () => ({
-      store: store.store,
+      
       ask: "",
       bid: "",
       bid_token_contract: "tokendapppub",
