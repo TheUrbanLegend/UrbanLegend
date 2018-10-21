@@ -37,4 +37,7 @@ const transferTokenViaEosjs = async ({ from, to, memo = '', quantity = '0.0001 E
   })
 }
 
-export { transferTokenViaScatter as transferToken, transferTokenViaEosjs }
+export {
+  transferTokenViaScatter as transferToken,
+  transferTokenViaEosjs
+}

@@ -193,34 +193,34 @@ export default {
       }).then((res) => {
         // Log for debug
         console.log(res)
-          // 轮询查找结果
-          const r = setInterval(() => {
-            this.rpc
-              .get_table_rows({
-                json: true,
-                code: 'happyeosdice',
-                scope: this.account.name,
-                table: 'result',
-                table_key: '0'
-              })
-              .then(data => {
-                const ans = data.rows[0].roll_number
-                // roll点值为0-99
-                if (ans < 100) {
-                  clearInterval(r)
-                  this.loading = false
-                  if (
-                    (this.choose === 'small' && ans < this.range) ||
+        // 轮询查找结果
+        const r = setInterval(() => {
+          this.rpc
+            .get_table_rows({
+              json: true,
+              code: 'happyeosdice',
+              scope: this.account.name,
+              table: 'result',
+              table_key: '0'
+            })
+            .then(data => {
+              const ans = data.rows[0].roll_number
+              // roll点值为0-99
+              if (ans < 100) {
+                clearInterval(r)
+                this.loading = false
+                if (
+                  (this.choose === 'small' && ans < this.range) ||
                     (this.choose === 'big' && ans > this.range)
-                  ) {
-                    this.roll_success(ans)
-                  } else {
-                    this.roll_fail(ans)
-                  }
+                ) {
+                  this.roll_success(ans)
+                } else {
+                  this.roll_fail(ans)
                 }
-              })
-          }, 1000)
-        })
+              }
+            })
+        }, 1000)
+      })
         .catch(err => {
           console.error(err)
           alert('项目出错了，快联系开发者！')
