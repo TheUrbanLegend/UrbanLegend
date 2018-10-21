@@ -12,25 +12,25 @@
             <div class="adorn-top"></div>
             <div class="adorn-bottom"></div>
             <div class="box1-left">
-                <div class="img-box img-box1" v-bind:class="{selected: index == 1}"></div>
-                <div class="img-box img-box2" v-bind:class="{selected: index == 2}"></div>
-                <div class="img-box img-box3" v-bind:class="{selected: index == 3}"></div>
-                <div class="img-box img-box4" v-bind:class="{selected: index == 4}"></div>
-                <div class="img-box img-box5" v-bind:class="{selected: index == 5}"></div>
-                <div class="img-box img-box6" v-bind:class="{selected: index == 6}"></div>
+                <div class="img-box img-box1" v-bind:class="{selected: index === 1}"></div>
+                <div class="img-box img-box2" v-bind:class="{selected: index === 2}"></div>
+                <div class="img-box img-box3" v-bind:class="{selected: index === 3}"></div>
+                <div class="img-box img-box4" v-bind:class="{selected: index === 4}"></div>
+                <div class="img-box img-box5" v-bind:class="{selected: index === 5}"></div>
+                <div class="img-box img-box6" v-bind:class="{selected: index === 6}"></div>
             </div>
             <div class="box2-center">
                 <div class="box2-contain">
                     <div class="center-box-top">
 
-                        <div class="img-box img-box28" v-bind:class="{selected: index == 28}"></div>
-                        <div class="img-box img-box27" v-bind:class="{selected: index == 27}"></div>
-                        <div class="img-box img-box26" v-bind:class="{selected: index == 26}"></div>
-                        <div class="img-box img-box25" v-bind:class="{selected: index == 25}"></div>
-                        <div class="img-box img-box24" v-bind:class="{selected: index == 24}"></div>
-                        <div class="img-box img-box23" v-bind:class="{selected: index == 23}"></div>
-                        <div class="img-box img-box22" v-bind:class="{selected: index == 22}"></div>
-                        <div class="img-box img-box21" v-bind:class="{selected: index == 21}"></div>
+                        <div class="img-box img-box28" v-bind:class="{selected: index === 28}"></div>
+                        <div class="img-box img-box27" v-bind:class="{selected: index === 27}"></div>
+                        <div class="img-box img-box26" v-bind:class="{selected: index === 26}"></div>
+                        <div class="img-box img-box25" v-bind:class="{selected: index === 25}"></div>
+                        <div class="img-box img-box24" v-bind:class="{selected: index === 24}"></div>
+                        <div class="img-box img-box23" v-bind:class="{selected: index === 23}"></div>
+                        <div class="img-box img-box22" v-bind:class="{selected: index === 22}"></div>
+                        <div class="img-box img-box21" v-bind:class="{selected: index === 21}"></div>
 
                     </div>
                     <div class="center-box-center">
@@ -48,46 +48,42 @@
                                 <span class="tooltiptext">点击修改Bet数额</span>
                             </div>
                             <div class="bet">EOP</div>
-                            <div class="bet-num">{{ (eop!=""?eop.toFixed(4):eop)||0 }}
+                            <div class="bet-num">{{ (eop!==""?eop.toFixed(4):eop)||0 }}
                             </div>
 
                             <!-- <div class="cirlce-left"></div> -->
                         </div>
                         <div class="center-box-center-center">
-                            <!-- <div class="center-num" >
-                               &lt;!&ndash;  <span>充值金额</span>&ndash;&gt;
-                                 <input v-model="deposit_input" type="number" id="deposit_input" placeholder="Deposit EOS number">
-                             </div>-->
                         </div>
                         <div class="center-box-center-right">
                             <!-- <div class="credits">Current EOP</div>
                             <div class="credits-num">{{ eop.toFixed(4) || 0 }}</div> -->
-                            <div class="credits">Balance</div>
-                            <div class="credits-num">{{ user_eos_balance || 0 }}</div>
+                            <div class="credits"> EOS Balance</div>
+                            <div class="credits-num">{{ balance.eos.slice(0, -4) }} </div>
                             <!--   <div class="small"> </div>-->
-                            <div class="credits">HPY</div>
-                            <div class="credits-num">{{ user_hpy_balance || 0 }}</div>
+                            <div class="credits"> HPY Balance</div>
+                            <div class="credits-num">{{ balance.hpy.slice(0, -4) }}</div>
                         </div>
                     </div>
                     <div class="center-box-bottom">
-                        <div class="img-box img-box7" v-bind:class="{selected: index == 7}"></div>
-                        <div class="img-box img-box8" v-bind:class="{selected: index == 8}"></div>
-                        <div class="img-box img-box9" v-bind:class="{selected: index == 9}"></div>
-                        <div class="img-box img-box10" v-bind:class="{selected: index == 10}"></div>
-                        <div class="img-box img-box11" v-bind:class="{selected: index == 11}"></div>
-                        <div class="img-box img-box12" v-bind:class="{selected: index == 12}"></div>
-                        <div class="img-box img-box13" v-bind:class="{selected: index == 13}"></div>
-                        <div class="img-box img-box14" v-bind:class="{selected: index == 14}"></div>
+                        <div class="img-box img-box7" v-bind:class="{selected: index === 7}"></div>
+                        <div class="img-box img-box8" v-bind:class="{selected: index === 8}"></div>
+                        <div class="img-box img-box9" v-bind:class="{selected: index === 9}"></div>
+                        <div class="img-box img-box10" v-bind:class="{selected: index === 10}"></div>
+                        <div class="img-box img-box11" v-bind:class="{selected: index === 11}"></div>
+                        <div class="img-box img-box12" v-bind:class="{selected: index === 12}"></div>
+                        <div class="img-box img-box13" v-bind:class="{selected: index === 13}"></div>
+                        <div class="img-box img-box14" v-bind:class="{selected: index === 14}"></div>
                     </div>
                 </div>
             </div>
             <div class="box3-right">
-                <div class="img-box img-box20" v-bind:class="{selected: index == 20}"></div>
-                <div class="img-box img-box19" v-bind:class="{selected: index == 19}"></div>
-                <div class="img-box img-box18" v-bind:class="{selected: index == 18}"></div>
-                <div class="img-box img-box17" v-bind:class="{selected: index == 17}"></div>
-                <div class="img-box img-box16" v-bind:class="{selected: index == 16}"></div>
-                <div class="img-box img-box15" v-bind:class="{selected: index == 15}"></div>
+                <div class="img-box img-box20" v-bind:class="{selected: index === 20}"></div>
+                <div class="img-box img-box19" v-bind:class="{selected: index === 19}"></div>
+                <div class="img-box img-box18" v-bind:class="{selected: index === 18}"></div>
+                <div class="img-box img-box17" v-bind:class="{selected: index === 17}"></div>
+                <div class="img-box img-box16" v-bind:class="{selected: index === 16}"></div>
+                <div class="img-box img-box15" v-bind:class="{selected: index === 15}"></div>
             </div>
         </div>
         <div class="main-bg">
@@ -111,7 +107,7 @@
                 <div class="left"></div>
                 <div class="right"></div>
             </div>
-            <div v-if="!store.account">
+            <div v-if="!account">
                 <el-button type="primary" class="login-button" @click="setIdentity()" >{{$t('LOGIN')}}</el-button>
             </div>
             <div v-else>
@@ -146,8 +142,6 @@
                     </tbody>
                 </table>
             </div>
-            <!--  <p> EOP：{{ eop }} </p>
-              <p> HPY余额: {{ user_hpy_balance }}</p>-->
         </div>
         <audio id="audioId" loop="loop" preload="auto" autoplay="autoplay">
             <source src="../../assets/music/tiger.mp3" type="audio/mp3">
@@ -176,25 +170,22 @@
     </div>
 </template>
 <script>
-import { network } from '@/config/'
-import Eos from 'eosjs'
-import ElButton from '../../../node_modules/element-ui/packages/button/src/button'
+import { mapState, mapActions, mapGetters } from 'vuex'
+import axios from 'axios'
+import { transferTokenViaEosjs } from '@/blockchain'
+import { createHexRandom } from './helper'
+import { network } from '@/config'
+// import ElButton from '../../../node_modules/element-ui/packages/button/src/button'
 
 export default {
-  components: { ElButton },
+  // components: { ElButton },
   data () {
     return {
-
       requiredFields: null,
       eos: null,
-      account: null,
-      user_hpy_balance: 0,
-      user_eos_balance: 0,
       actions: [],
       last_bet: null,
       bet_input: '1.0000',
-      bet_result: null,
-      old_bet_amount: null,
       index: 0, // 当前转动到哪个位置，起点位置
       count: 28, // 总共有多少个位置
       speed: 20, // 初始转动速度
@@ -204,30 +195,14 @@ export default {
       times: 0,
       prize: -1, // 中奖位置
       running: false, // 正在抽奖
-      tpConnected: false,
-      eop: 1, // 经营状况系数
-      tpAccount: null,
-      network: localStorage.getItem('network')
+      eop: 1 // 经营状况系数
     }
   },
-  created: function () {
-    this.setIdentity()
+  created () {
     this.get_current_balance()
   },
-  watch: {},
   methods: {
-    resolveUrl: function (to) {
-      if (typeof to === 'string') return to
-      if (to.name && !to.path) return to.name
-      if (!to.query) return to.path
-      var baseUrl = to.path + (to.path.indexOf('?') >= 0 ? '&' : '?')
-      var args = []
-      for (var x in to.query) {
-        args.push(x + '=' + encodeURIComponent(to.query[x]))
-      }
-      return (baseUrl += args.join('&'))
-    },
-    change_bet: function () {
+    change_bet () {
       this.play_se('se_click')
       var new_bet = parseFloat(prompt('赌多少EOS？'))
       //            var new_bet = prompt("赌多少EOS？");
@@ -236,28 +211,15 @@ export default {
         this.bet_input = new Number(new_bet).toFixed(4)
       }
     },
-    get_current_balance: function () {
+    get_current_balance () {
       this.get_current_eop()
-      //            this.fetch_action()
-    },
-    getHpyAndEosBalance () {
-      this.store.scatter
-        .getCurrencyBalance('happyeosslot', this.store.account.name)
-        .then(x => {
-          this.user_hpy_balance = x[0].split(' ', 1)[0]
-        })
-      this.store.scatter
-        .getCurrencyBalance('eosio.token', this.store.account.name)
-        .then(x => {
-          this.user_eos_balance = x[0].split(' ', 1)[0]
-        })
     },
     get_current_eop: async function () {
-      var happyeosslot_balance = await this.store.scatter.getCurrencyBalance(
+      var happyeosslot_balance = await this.rpc.get_currency_balance(
         'eosio.token',
         'happyeosslot'
       )
-      var happyeosslot_true_balance = await this.store.scatter.getTableRows({
+      var happyeosslot_true_balance = await this.rpc.get_table_rows({
         json: 'true',
         code: 'happyeosslot',
         scope: 'happyeosslot',
@@ -273,10 +235,9 @@ export default {
       this.eop = happyeosslot_balance / (happyeosslot_true_balance - 1250)
       // this.eop = new Number(this.eop).toFixed(4);
 
-      this.getHpyAndEosBalance()
       return this.eop
     },
-    make_deposit: function (event) {
+    make_deposit (event) {
       this.play_se('se_click')
       var new_deposit = prompt('购买多少EOS的股份？')
       // Check new deposit
@@ -284,15 +245,10 @@ export default {
         if (this.isPc()) {
           this.deposit(new_deposit)
         } else {
-          if (this.tpConnected) {
-            this.tpDeposit(new_deposit)
-          } else {
-            alert('请下载安装TokenPocket')
-          }
         }
       }
     },
-    make_withdraw: function (event) {
+    make_withdraw (event) {
       this.play_se('se_click')
       var new_withdraw = prompt('出售多少HPY（股份）？')
       // Check new withdraw
@@ -300,31 +256,26 @@ export default {
         this.withdraw(new_withdraw)
       }
     },
-    redirect: function (name, path, params, query) {
-      if (name && !path) path = name
-      LazyRouting.RedirectTo(name, path, params, query)
-    },
-    get_roll_result: function () {
-      this.store.scatter
-        .getTableRows({
+    get_roll_result () {
+      this.rpc
+        .get_table_rows({
           json: 'true',
           code: 'happyeosslot',
-          scope: this.store.account.name,
+          scope: this.account.name,
           limit: 10,
           table: 'result'
         })
         .then(data => {
           console.log(data)
           var result = data.rows[0].roll_number
-          this.bet_result = result
           var rate_100 = 25
-          var rate_50 = new Array(11, 24)
-          var rate_20 = new Array(6, 16, 21)
-          var rate_10 = new Array(1, 10, 26)
-          var rate_5 = new Array(3, 13, 18, 22)
-          var rate_2 = new Array(2, 8, 17, 28)
-          var rate_0_1 = new Array(5, 9, 12, 14, 19)
-          var rate_0_0_1 = new Array(4, 7, 15, 20, 23, 27)
+          var rate_50 = [11, 24]
+          var rate_20 = [6, 16, 21]
+          var rate_10 = [1, 10, 26]
+          var rate_5 = [3, 13, 18, 22]
+          var rate_2 = [2, 8, 17, 28]
+          var rate_0_1 = [5, 9, 12, 14, 19]
+          var rate_0_0_1 = [4, 7, 15, 20, 23, 27]
 
           if (this.running) {
             var random = Math.random()
@@ -354,66 +305,16 @@ export default {
           alert(err.toString())
         })
     },
-    tpGetRollResult: function () {
-      tp.getTableRows({
-        json: 'true',
-        code: 'happyeosslot',
-        scope: this.tpAccount.name,
-        limit: 10,
-        table: 'result'
-      })
-        .then(data => {
-          var result = data.rows[0].roll_number
-          this.bet_result = result
-
-          var rate_100 = 25
-          var rate_50 = new Array(11, 24)
-          var rate_20 = new Array(6, 16, 21)
-          var rate_10 = new Array(1, 10, 26)
-          var rate_5 = new Array(3, 13, 18, 22)
-          var rate_2 = new Array(2, 8, 17, 28)
-          var rate_0_1 = new Array(5, 9, 12, 14, 19)
-          var rate_0_0_1 = new Array(4, 7, 15, 20, 23, 27)
-
-          if (this.running) {
-            var random = Math.random()
-            // console.log(random);
-            if (result >= 10000) {
-              this.stop_at(rate_100)
-            } else if (result >= 5000) {
-              this.stop_at(rate_50[Math.floor(random) * 2])
-            } else if (result >= 2000) {
-              this.stop_at(rate_20[Math.floor(random * 3)])
-            } else if (result >= 1000) {
-              this.stop_at(rate_10[Math.floor(random * 3)])
-            } else if (result >= 500) {
-              this.stop_at(rate_5[Math.floor(random * 4)])
-            } else if (result >= 200) {
-              this.stop_at(rate_2[Math.floor(random * 4)])
-            } else if (result >= 10) {
-              this.stop_at(rate_0_1[Math.floor(random * 5)])
-            } else if (result >= 1) {
-              this.stop_at(rate_0_0_1[Math.floor(random * 6)])
-            } else {
-              this.result_timer = setTimeout(this.get_roll_result, 200) // 循环调用
-            }
-          }
-        })
-        .catch(err => {
-          alert(err)
-        })
-    },
-    deposit: function (amount) {
+    deposit (amount) {
       this.play_se('se_click')
       amount = new Number(amount).toFixed(4)
       // console.log(amount);
-      this.store.scatter
-        .transfer(
-          this.store.account.name,
-          'happyeosslot',
-          amount + ' EOS',
-          'buy'
-        )
+      transferTokenViaEosjs({
+        from: this.account.name,
+        to: 'happyeosslot',
+        memo: 'buy',
+        quantity: amount + ' EOS'
+      })
         .then(() => {
           this.play_se('se_buy')
           this.get_current_balance()
@@ -423,26 +324,8 @@ export default {
           alert(err.toString())
         })
     },
-    tpDeposit: function (amount) {
-      amount = new Number(amount).toFixed(4)
-      tp.eosTokenTransfer({
-        from: tpAccount.name,
-        to: 'happyeosslot',
-        amount: amount,
-        tokenName: 'EOS',
-        precision: 4,
-        contract: 'eosio.token',
-        memo: 'buy'
-      }).then(function (data) {
-        if (data.result) {
-          alert('充值成功：' + amount)
-          this.get_current_balance()
-        } else {
-          alert('充值失败')
-        }
-      })
-    },
-    withdraw: function (amount) {
+    withdraw (amount) {
+      // @todo: EOSJS2 actions maybe?
       this.play_se('se_click')
       amount = new Number(amount).toFixed(4)
       var requiredFields = (this.requiredFields = {
@@ -454,10 +337,8 @@ export default {
         })
         .then(contract => {
           contract
-            .sell(this.store.account.name, amount + ' HPY', {
-              authorization: [
-                `${this.store.account.name}@${this.store.account.authority}`
-              ]
+            .sell(this.account.name, amount + ' HPY', {
+              authorization: [`${this.account.name}@${this.account.authority}`]
             })
             .then(() => {
               this.get_current_balance()
@@ -470,52 +351,7 @@ export default {
           alert(err.toString())
         })
     },
-    setIdentity: function () {
-      store.initIdentity()
-      this.init_scatter()
-      this.get_current_balance()
-      this.requiredFields = {
-        accounts: network
-      }
-    },
-    init_scatter: function () {
-      if (this.store.scatter != null) return
-      //            if (this.tpAccount != null) return;
-      if (this.isPc()) {
-        if (!('scatter' in window)) {
-          alert('没有找到Scatter.')
-        } else {
-          scatter
-            .getIdentity({
-              accounts: [
-                {
-                  chainId: config.networks[store.store.network].chainId,
-                  blockchain: config.networks[store.store.network].blockchain
-                }
-              ]
-            })
-            .then(identity => {
-              this.setIdentity(identity)
-            })
-            .catch(err => {
-              alert('Scatter 初始化失败.')
-            })
-        }
-      } else {
-        // 移动端
-        this.tpConnected = tp.isConnected()
-        if (this.tpConnected) {
-          // test
-          // this.tpBalance();
-          tp.getWalletList('eos').then(function (data) {
-            this.tpAccount = data.wallets.eos[0]
-          })
-        } else {
-          alert('请下载TokenPocket') // 待完善
-        }
-      }
-    },
-    roll: function () {
+    roll () {
       var index = this.index
       var count = this.count
       index += 1
@@ -525,51 +361,19 @@ export default {
       this.index = index
       return false
     },
-    createHexRandom: function () {
-      var num = ''
-      for (var i = 0; i < 64; i++) {
-        var tmp = Math.floor(Math.random() * 16)
-        if (tmp > 9) {
-          switch (tmp) {
-            case 10:
-              num += 'a'
-              break
-            case 11:
-              num += 'b'
-              break
-            case 12:
-              num += 'c'
-              break
-            case 13:
-              num += 'd'
-              break
-            case 14:
-              num += 'e'
-              break
-            case 15:
-              num += 'f'
-              break
-          }
-        } else {
-          num += tmp
-        }
-      }
-      return num
-    },
-    start_roll: function () {
+    start_roll () {
       this.play_se('se_click')
       if (this.running) return
-      var amount = new Number(this.bet_input).toFixed(4)
-      if (this.bet_input == '') {
+      var amount = Number(this.bet_input).toFixed(4)
+      if (this.bet_input === '') {
         amount = '1.0000'
       }
-      this.store.scatter
-        .transfer(
-          this.store.account.name,
-          'happyeosslot',
-          amount + ' EOS',
-          'bet ' + this.createHexRandom()
-        )
+      transferTokenViaEosjs({
+        from: this.account.name,
+        to: 'happyeosslot',
+        memo: `bet ${createHexRandom()}`,
+        quantity: amount + ' EOS'
+      })
         .then(() => {
           this.play_se('se_startrolling')
           this.running = true
@@ -581,11 +385,11 @@ export default {
           alert(err.toString())
         })
     },
-    roll_loop: function () {
+    roll_loop () {
       this.play_se('se_rolling')
       this.times += 1
       this.roll()
-      if (this.times > this.cycle + 10 && this.prize == this.index) {
+      if (this.times > this.cycle + 10 && this.prize === this.index) {
         clearTimeout(this.timer)
         this.prize = -1
         this.times = 0
@@ -598,11 +402,11 @@ export default {
             this.speed -= 10
           }
         } else {
-          if (this.prize != -1) {
+          if (this.prize !== -1) {
             if (
               this.times > this.cycle + 10 &&
-              ((this.prize == 1 && this.index == this.count) ||
-                this.prize == this.index + 1)
+              ((this.prize === 1 && this.index === this.count) ||
+                this.prize === this.index + 1)
             ) {
               this.speed += 110
             } else {
@@ -619,7 +423,7 @@ export default {
         this.timer = setTimeout(this.roll_loop, this.speed) // 循环调用
       }
     },
-    fetch_action: async function () {
+    async fetch_action () {
       // Sorry SuperONE, EOSAsia have the BETTER get_actions API than yours,
       const { data } = await axios({
         method: 'post',
@@ -632,36 +436,27 @@ export default {
         .filter(action => action.quantity) // No Reveal Blank Data will be shown
       // alert(res)
     },
-    stop_at: function (stop_position) {
-      if (this.prize == -1) {
+    stop_at (stopPosition) {
+      if (this.prize === -1) {
         clearTimeout(this.result_timer)
-        this.prize = stop_position
+        this.prize = stopPosition
         this.get_current_balance()
       }
     },
-    isPc: function () {
+    isPc () {
       // 移动端PC端判断
       return !/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)
     },
-    swap_music: function (id) {
-      var oAudio = document.getElementById('audioId')
-      var playEvent = document.getElementById(id)
-      if (oAudio.paused) {
-        oAudio.play()
-        $('#' + id).attr('src', '../../assets/images/pause.jpg')
-      } else {
-        oAudio.pause()
-        $('#' + id).attr('src', '../../assets/images/play.jpg')
-      }
-    },
-
-    play_se: function (id) {
+    play_se (id) {
       var SEAudio = document.getElementById(id)
       SEAudio.currentTime = 0
       SEAudio.play()
     }
   },
-  computed: {}
+  computed: {
+    ...mapState(['rpc', 'eos', 'balance']),
+    ...mapGetters(['account'])
+  }
 }
 </script>
 <style scoped>

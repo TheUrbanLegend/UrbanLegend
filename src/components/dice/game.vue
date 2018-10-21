@@ -136,7 +136,10 @@ export default {
   computed: {
     ...mapState(['eos', 'rpc', 'balance', 'seed', 'referral']),
     ...mapGetters(['account']),
-    payOnWin: function () {
+    eosBalance () {
+      return Number(this.balance.eos.slice(0, -4))
+    },
+    payOnWin () {
       if (this.choose === 'small') {
         return Math.floor((98 / this.range) * this.betAmount * 10000) / 10000
       } else {
@@ -145,7 +148,7 @@ export default {
         )
       }
     },
-    payout: function () {
+    payout () {
       if (this.choose === 'small') {
         return Math.floor((98 / this.range) * 10000) / 10000
       } else {
@@ -166,17 +169,48 @@ export default {
     ...mapActions(['updateBalance']),
     amountTimes (data) {
       this.betAmount = this.betAmount * data
-      if (this.betAmount > this.eos.balance) {
-        this.betAmount = this.eos.balance
+      if (this.betAmount > this.eosBalance) {
+        this.betAmount = this.eosBalance
       }
     },
     amountMax () {
-      this.betAmount = this.eos.balance
+      this.betAmount = this.eosBalance
     },
     changeBetAmount (data) {
       this.betAmount = Math.floor(this.betAmount * 10000) / 10000
     },
-    roll: function () {
+    async queryReveal () {
+      const { rows } = await this.rpc.get_table_rows({
+        json: true,
+        code: 'happyeosdice',
+        scope: this.account.name,
+        table: 'result',
+        table_key: '0'
+      })
+      const ans = rows[0].roll_number
+      // roll点值为0-99
+      if (ans < 100) {
+        this.loading = false
+        if (
+          (this.choose === 'small' && ans < this.range) ||
+          (this.choose === 'big' && ans > this.range)
+        ) {
+          this.roll_success(ans)
+        } else {
+          this.roll_fail(ans)
+        }
+        this.updateBalance()
+      } else {
+        const nextTime = new Date().getTime() + 3000
+        console.log(
+          `Next Query for answer ${new Date(nextTime).toLocaleString()}`
+        )
+        setTimeout(() => {
+          this.queryReveal()
+        }, 3000)
+      }
+    },
+    async roll () {
       this.loading = true
       let memo = `bet ${
         this.choose === 'small' ? this.range + 100 : this.range
@@ -185,65 +219,38 @@ export default {
       if (referral) {
         memo += ` ${referral}`
       }
-      transferTokenViaEosjs({
-        from: this.account.name,
-        to: 'happyeosdice',
-        memo,
-        quantity: `${this.betAmount.toFixed(4)} EOS`
-      }).then((res) => {
-        // Log for debug
+      try {
+        const res = await transferTokenViaEosjs({
+          from: this.account.name,
+          to: 'happyeosdice',
+          memo,
+          quantity: `${this.betAmount.toFixed(4)} EOS`
+        })
         console.log(res)
         // 轮询查找结果
-        const r = setInterval(() => {
-          this.rpc
-            .get_table_rows({
-              json: true,
-              code: 'happyeosdice',
-              scope: this.account.name,
-              table: 'result',
-              table_key: '0'
-            })
-            .then(data => {
-              const ans = data.rows[0].roll_number
-              // roll点值为0-99
-              if (ans < 100) {
-                clearInterval(r)
-                this.loading = false
-                if (
-                  (this.choose === 'small' && ans < this.range) ||
-                    (this.choose === 'big' && ans > this.range)
-                ) {
-                  this.roll_success(ans)
-                } else {
-                  this.roll_fail(ans)
-                }
-              }
-            })
-        }, 1000)
-      })
-        .catch(err => {
-          console.error(err)
-          this.loading = false
-          alert('项目出错了，快联系开发者！')
-        })
+        this.queryReveal()
+      } catch (error) {
+        console.error(error)
+        this.loading = false
+        alert('项目出错了，快联系开发者！')
+      }
     },
-    roll_success: function (ans) {
-      this.$notify({
-        title: this.$t('Congratulations!'),
-        message: this.$t('success_message', [
+    roll_success (ans) {
+      const { $t, $notify } = this
+      $notify({
+        title: $t('Congratulations!'),
+        message: $t('success_message', [
           ans,
           this.payout * this.betAmount
         ]),
         type: 'success'
       })
-      this.updateBalance()
     },
-    roll_fail: function (ans) {
+    roll_fail (ans) {
       this.$notify.error({
         title: this.$t('You fail'),
         message: this.$t('fail_message', [ans, this.payout * this.betAmount])
       })
-      this.updateBalance()
     }
   }
 }
