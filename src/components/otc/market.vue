@@ -43,10 +43,6 @@ export default {
     }
   },
   methods: {
-    initIdentity() {
-      store.initIdentity();
-    },
-
     async ask_order() {
       const {bid_token_contract, ask_token_contract, ask, bid} = this
       const memo = `ask,${ask},${ask_token_contract}`

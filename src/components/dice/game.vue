@@ -158,9 +158,6 @@ export default {
       }
     },
     methods: {
-      initIdentity() {
-        store.initIdentity();
-      },
       amountTimes(data) {
         this.betAmount = this.betAmount * data;
         if(this.betAmount > this.store.eos.balance) {

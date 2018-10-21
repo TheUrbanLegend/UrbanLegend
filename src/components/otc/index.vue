@@ -89,9 +89,6 @@ export default {
     queryCoin() {
       this.jumpToDiffrentToken(this.contractBySelf, this.coinBySelf);
     },
-    initIdentity() {
-      store.initIdentity();
-    },
     jumpToDiffrentToken(tokenContract, tokenSymbol) {
       this.$router.push({
         name: "OTC",
