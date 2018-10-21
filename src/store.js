@@ -9,6 +9,7 @@ import { network } from './config'
 
 Vue.use(Vuex)
 const seed = localStorage.getItem('seed') || new Chance().word({ length: 10 })
+const referral = localStorage.getItem('refferal') || null
 
 export default new Vuex.Store({
   state: {
@@ -16,6 +17,7 @@ export default new Vuex.Store({
     identity: null,
     eos: null,
     seed,
+    referral,
     rpc: null,
     balance: {
       eos: '0.0000 EOS',

@@ -114,112 +114,137 @@
 </template>
 
 <script>
+import { transferTokenViaEosjs } from "@/blockchain";
 import { mapState, mapActions, mapMutations, mapGetters } from "vuex";
 // import tokenDisplay from '@/components/token/token.vue';
-import log from './log.vue';
+import log from "./log.vue";
 
 export default {
-    components: {
-      // 'token-display': tokenDisplay,
-      'dice-log': log,
-    },
-    data() {
-      return {
-        range: 50,
-        betAmount: 1,
-        isShowBetDialog: false,
-        loading: false,
-        choose: 'small',
-      };
-    },
-    computed: {
-      ...mapState(['eos', 'scatter', 'balance', 'seed']),
-      ...mapGetters(['account']),
-      payOnWin: function() {
-        if (this.choose === 'small') {
-          return Math.floor(98 / this.range * this.betAmount * 10000) / 10000;
-        } else {
-          return Math.floor(98 / (99 - this.range) * this.betAmount * 10000) / 10000;
-        }
-      },
-      payout: function() {
-        if (this.choose === 'small') {
-          return Math.floor(98 / this.range * 10000) / 10000;
-        } else {
-          return Math.floor(98 / (99 - this.range) * 10000) / 10000;
-        }
+  components: {
+    // 'token-display': tokenDisplay,
+    "dice-log": log
+  },
+  data() {
+    return {
+      range: 50,
+      betAmount: 1,
+      isShowBetDialog: false,
+      loading: false,
+      choose: "small"
+    };
+  },
+  computed: {
+    ...mapState(["eos", "scatter", "balance", "seed", "referral"]),
+    ...mapGetters(["account"]),
+    payOnWin: function() {
+      if (this.choose === "small") {
+        return Math.floor((98 / this.range) * this.betAmount * 10000) / 10000;
+      } else {
+        return (
+          Math.floor((98 / (99 - this.range)) * this.betAmount * 10000) / 10000
+        );
       }
     },
-    watch: {
-      range(newRange, oldRange) {
-        if(newRange < 6) {
-          this.range = 6;
-        } else if(newRange > 93) {
-          this.range = 93;
-        }
+    payout: function() {
+      if (this.choose === "small") {
+        return Math.floor((98 / this.range) * 10000) / 10000;
+      } else {
+        return Math.floor((98 / (99 - this.range)) * 10000) / 10000;
       }
-    },
-    methods: {
-      ...mapActions(['updateBalance']),
-      amountTimes(data) {
-        this.betAmount = this.betAmount * data;
-        if(this.betAmount > this.eos.balance) {
-          this.betAmount = this.eos.balance;
-        }
-      },
-      amountMax() {
+    }
+  },
+  watch: {
+    range(newRange, oldRange) {
+      if (newRange < 6) {
+        this.range = 6;
+      } else if (newRange > 93) {
+        this.range = 93;
+      }
+    }
+  },
+  methods: {
+    ...mapActions(["updateBalance"]),
+    amountTimes(data) {
+      this.betAmount = this.betAmount * data;
+      if (this.betAmount > this.eos.balance) {
         this.betAmount = this.eos.balance;
-      },
-      changeBetAmount(data) {
-        this.betAmount = Math.floor(this.betAmount * 10000) / 10000;
-      },
-      roll: function() {
-        this.loading = true;
-        let memo = `bet ${this.choose === 'small' ? this.range + 100 : this.range} ${this.seed}`;
-        // const referral = this.referral;
-        if (referral) {
-          memo += ` ${referral}`;
-        }
-        this.scatter.transfer(this.account.name, "happyeosdice", `${this.betAmount.toFixed(4)} EOS`, memo)
-          .then(() => {
-            // 轮询查找结果
-            const r = setInterval(() => {
-              this.scatter.getTableRows(true, "happyeosdice", this.account.name, "result", "0").then((data) => {
+      }
+    },
+    amountMax() {
+      this.betAmount = this.eos.balance;
+    },
+    changeBetAmount(data) {
+      this.betAmount = Math.floor(this.betAmount * 10000) / 10000;
+    },
+    roll: function() {
+      this.loading = true;
+      let memo = `bet ${
+        this.choose === "small" ? this.range + 100 : this.range
+      } ${this.seed}`;
+      const referral = this.referral;
+      if (referral) {
+        memo += ` ${referral}`;
+      }
+      transferTokenViaEosjs({
+        from: this.account.name,
+        to: "happyeosdice",
+        memo,
+        quantity: `${this.betAmount.toFixed(4)} EOS`
+      })
+        .then(() => {
+          // 轮询查找结果
+          const r = setInterval(() => {
+            this.scatter
+              .getTableRows(
+                true,
+                "happyeosdice",
+                this.account.name,
+                "result",
+                "0"
+              )
+              .then(data => {
                 const ans = data.rows[0].roll_number;
                 // roll点值为0-99
                 if (ans < 100) {
                   clearInterval(r);
                   this.loading = false;
-                  if ((this.choose === 'small' && ans < this.range) || (this.choose === 'big' && ans > this.range)) {
+                  if (
+                    (this.choose === "small" && ans < this.range) ||
+                    (this.choose === "big" && ans > this.range)
+                  ) {
                     this.roll_success(ans);
                   } else {
                     this.roll_fail(ans);
                   }
                 }
               });
-            }, 1000);
-          }).catch((err) => {
-            console.error(err);
-            alert('项目出错了，快联系开发者！');
-          });
-      },
-      roll_success: function(ans) {
-        this.$notify({
-          title: this.$t('Congratulations!'),
-          message: this.$t('success_message', [ans, this.payout * this.betAmount]),
-          type: 'success',
+          }, 1000);
+        })
+        .catch(err => {
+          console.error(err);
+          alert("项目出错了，快联系开发者！");
         });
-        updateBalance();
-      },
-      roll_fail: function(ans) {
-        this.$notify.error({
-          title: this.$t('You fail'),
-          message: this.$t('fail_message', [ans, this.payout * this.betAmount]),
-        });
-        updateBalance();
-      }
+    },
+    roll_success: function(ans) {
+      this.$notify({
+        title: this.$t("Congratulations!"),
+        message: this.$t("success_message", [
+          ans,
+          this.payout * this.betAmount
+        ]),
+        type: "success"
+      });
+      updateBalance();
+    },
+    roll_fail: function(ans) {
+      this.$notify.error({
+        title: this.$t("You fail"),
+        message: this.$t("fail_message", [ans, this.payout * this.betAmount])
+      });
+      updateBalance();
     }
-}
+  }
+};
 </script>
 
 <style>

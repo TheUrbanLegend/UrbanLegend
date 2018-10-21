@@ -18,4 +18,4 @@ export function getMyBalancesByContract({ tokenContract = 'eosio.token', symbol 
   return getBalancesByContract({ tokenContract, accountName, symbol })
 }
 
-export { transferToken } from './transfer'
+export { transferToken, transferTokenViaEosjs } from './transfer'
