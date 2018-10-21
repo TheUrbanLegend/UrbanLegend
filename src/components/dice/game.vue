@@ -114,146 +114,146 @@
 </template>
 
 <script>
-import { transferTokenViaEosjs } from "@/blockchain";
-import { mapState, mapActions, mapMutations, mapGetters } from "vuex";
+import { transferTokenViaEosjs } from '@/blockchain'
+import { mapState, mapActions, mapMutations, mapGetters } from 'vuex'
 // import tokenDisplay from '@/components/token/token.vue';
-import log from "./log.vue";
+import log from './log.vue'
 
 export default {
   components: {
     // 'token-display': tokenDisplay,
-    "dice-log": log
+    'dice-log': log
   },
-  data() {
+  data () {
     return {
       range: 50,
       betAmount: 1,
       isShowBetDialog: false,
       loading: false,
-      choose: "small"
-    };
+      choose: 'small'
+    }
   },
   computed: {
-    ...mapState(["eos", "rpc", "balance", "seed", "referral"]),
-    ...mapGetters(["account"]),
-    eosBalance() {
-      return Number(this.balance.eos.slice(0,-4))
+    ...mapState(['eos', 'rpc', 'balance', 'seed', 'referral']),
+    ...mapGetters(['account']),
+    eosBalance () {
+      return Number(this.balance.eos.slice(0, -4))
     },
-    payOnWin() {
-      if (this.choose === "small") {
-        return Math.floor((98 / this.range) * this.betAmount * 10000) / 10000;
+    payOnWin () {
+      if (this.choose === 'small') {
+        return Math.floor((98 / this.range) * this.betAmount * 10000) / 10000
       } else {
         return (
           Math.floor((98 / (99 - this.range)) * this.betAmount * 10000) / 10000
-        );
+        )
       }
     },
-    payout() {
-      if (this.choose === "small") {
-        return Math.floor((98 / this.range) * 10000) / 10000;
+    payout () {
+      if (this.choose === 'small') {
+        return Math.floor((98 / this.range) * 10000) / 10000
       } else {
-        return Math.floor((98 / (99 - this.range)) * 10000) / 10000;
+        return Math.floor((98 / (99 - this.range)) * 10000) / 10000
       }
     }
   },
   watch: {
-    range(newRange, oldRange) {
+    range (newRange, oldRange) {
       if (newRange < 6) {
-        this.range = 6;
+        this.range = 6
       } else if (newRange > 93) {
-        this.range = 93;
+        this.range = 93
       }
     }
   },
   methods: {
-    ...mapActions(["updateBalance"]),
-    amountTimes(data) {
-      this.betAmount = this.betAmount * data;
+    ...mapActions(['updateBalance']),
+    amountTimes (data) {
+      this.betAmount = this.betAmount * data
       if (this.betAmount > this.eosBalance) {
-        this.betAmount = this.eosBalance;
+        this.betAmount = this.eosBalance
       }
     },
-    amountMax() {
-      this.betAmount = this.eosBalance;
+    amountMax () {
+      this.betAmount = this.eosBalance
     },
-    changeBetAmount(data) {
-      this.betAmount = Math.floor(this.betAmount * 10000) / 10000;
+    changeBetAmount (data) {
+      this.betAmount = Math.floor(this.betAmount * 10000) / 10000
     },
-    async queryReveal() {
+    async queryReveal () {
       const { rows } = await this.rpc.get_table_rows({
         json: true,
-        code: "happyeosdice",
+        code: 'happyeosdice',
         scope: this.account.name,
-        table: "result",
-        table_key: "0"
-      });
-      const ans = rows[0].roll_number;
+        table: 'result',
+        table_key: '0'
+      })
+      const ans = rows[0].roll_number
       // roll点值为0-99
       if (ans < 100) {
-        this.loading = false;
+        this.loading = false
         if (
-          (this.choose === "small" && ans < this.range) ||
-          (this.choose === "big" && ans > this.range)
+          (this.choose === 'small' && ans < this.range) ||
+          (this.choose === 'big' && ans > this.range)
         ) {
-          this.roll_success(ans);
+          this.roll_success(ans)
         } else {
-          this.roll_fail(ans);
+          this.roll_fail(ans)
         }
-        this.updateBalance();
+        this.updateBalance()
       } else {
-        const nextTime = new Date().getTime() + 3000;
+        const nextTime = new Date().getTime() + 3000
         console.log(
           `Next Query for answer ${new Date(nextTime).toLocaleString()}`
-        );
+        )
         setTimeout(() => {
-          this.queryReveal();
-        }, 3000);
+          this.queryReveal()
+        }, 3000)
       }
     },
-    async roll() {
-      this.loading = true;
+    async roll () {
+      this.loading = true
       let memo = `bet ${
-        this.choose === "small" ? this.range + 100 : this.range
-      } ${this.seed}`;
-      const referral = this.referral;
+        this.choose === 'small' ? this.range + 100 : this.range
+      } ${this.seed}`
+      const referral = this.referral
       if (referral) {
-        memo += ` ${referral}`;
+        memo += ` ${referral}`
       }
       try {
         const res = await transferTokenViaEosjs({
           from: this.account.name,
-          to: "happyeosdice",
+          to: 'happyeosdice',
           memo,
           quantity: `${this.betAmount.toFixed(4)} EOS`
-        });
-        console.log(res);
+        })
+        console.log(res)
         // 轮询查找结果
-        this.queryReveal();
+        this.queryReveal()
       } catch (error) {
-        console.error(error);
-        this.loading = false;
-        alert("项目出错了，快联系开发者！");
+        console.error(error)
+        this.loading = false
+        alert('项目出错了，快联系开发者！')
       }
     },
-    roll_success(ans) {
+    roll_success (ans) {
       const { $t, $notify } = this
       $notify({
-        title: $t("Congratulations!"),
-        message: $t("success_message", [
+        title: $t('Congratulations!'),
+        message: $t('success_message', [
           ans,
           this.payout * this.betAmount
         ]),
-        type: "success"
-      });
+        type: 'success'
+      })
     },
-    roll_fail(ans) {
+    roll_fail (ans) {
       this.$notify.error({
-        title: this.$t("You fail"),
-        message: this.$t("fail_message", [ans, this.payout * this.betAmount])
-      });
+        title: this.$t('You fail'),
+        message: this.$t('fail_message', [ans, this.payout * this.betAmount])
+      })
     }
   }
-};
+}
 </script>
 
 <style>
