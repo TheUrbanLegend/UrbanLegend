@@ -5,4 +5,5 @@ import store from '../store'
 export const currentState = () => store.state
 export const currentGetters = () => store.getters
 export const eos = () => currentState().eos
+export const rpc = () => currentState().rpc
 export const scatter = () => currentState().scatter
