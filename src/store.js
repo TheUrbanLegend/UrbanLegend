@@ -1,21 +1,31 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import Chance from 'chance'
 // import Eos from 'eosjs'
 import ScatterJS from 'scatterjs-core'
 import ScatterEOS from 'scatterjs-plugin-eosjs2'
+import Eos from 'eosjs'
 import { getMyBalancesByContract } from './blockchain'
 import { network } from './config'
 
 Vue.use(Vuex)
+const seed = localStorage.getItem('seed') || new Chance().word({ length: 10 })
+const referral = localStorage.getItem('refferal') || null
 
 export default new Vuex.Store({
   state: {
     scatter: null,
     identity: null,
     eos: null,
+    seed,
+    referral,
+    rpc: null,
     balance: {
-      eos: '0.0000 EOS'
+      eos: '0.0000 EOS',
+      hpy: '0.0000 HPY',
+      kby: '0.0000 KBY'
     },
+    lang: localStorage.getItem('lang') || 'ch',
     dataIsLoading: true,
     globalInfo: null
   },
@@ -34,7 +44,9 @@ export default new Vuex.Store({
   mutations: {
     setScatter (state, scatter) {
       state.scatter = scatter
-      // state.eos = scatter.eos(network, Eos, {})
+      const rpc = new Eos.Rpc.JsonRpc(`${network.protocol}://${network.host}:${network.port}`)
+      state.rpc = rpc
+      state.eos = scatter.eos(network, Eos.Api, { rpc })
       // state.identity = scatter.identity
     },
     // setIdentity(state, identity) {
@@ -48,6 +60,9 @@ export default new Vuex.Store({
     },
     setGlobal (state, globalInfo) {
       state.globalInfo = globalInfo
+    },
+    changeLang (state, code) {
+      state.lang = code
     }
   },
   actions: {
@@ -64,9 +79,7 @@ export default new Vuex.Store({
         commit('setScatter', ScatterJS.scatter)
         window.ScatterJS = null
 
-        const requiredFields = { accounts: [network] }
-        await state.scatter.getIdentity(requiredFields)
-        // commit('setIdentity', id)
+        dispatch('initIdentity')
       } catch (err) {
         err && console.log(err)
         alert('Error getting scatter instance')
@@ -77,10 +90,22 @@ export default new Vuex.Store({
         .then((price) => {
           commit('setBalance', { symbol: 'eos', balance: price[0] })
         })
+      getMyBalancesByContract({ symbol: 'kby', tokenContract: 'dacincubator' })
+        .then((price) => {
+          commit('setBalance', { symbol: 'kby', balance: price[0] })
+        })
+      getMyBalancesByContract({ symbol: 'hpy', tokenContract: 'happyeosslot' })
+        .then((price) => {
+          commit('setBalance', { symbol: 'hpy', balance: price[0] })
+        })
     },
-    setIdentity ({ commit, dispatch }, identity) {
-      // commit('setIdentity', identity)
+    async initIdentity ({ state, dispatch }) {
+      const requiredFields = { accounts: [network] }
+      await state.scatter.getIdentity(requiredFields)
       dispatch('updateBalance')
+    },
+    async forgetIdentity ({ commit, state }) {
+      await state.scatter.forgetIdentity()
     }
   }
 })

@@ -1,47 +1,77 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
+    <vip-menu></vip-menu>
+    <div id="game">
+      <router-view />
     </div>
-    <router-view/>
+    <footer>
+      <div class="socials">
+        <a href="" class="socialBtn Reddit">
+          <img src="./assets/images/Social/reddit_L@2x.png" alt=""></a>
+        <a href="" class="socialBtn Twitter">
+          <img src="./assets/images/Social/twitter_L@2x.png" alt=""></a>
+        <a href="" class="socialBtn Discord">
+          <img src="./assets/images/Social/Discord@2x.png" alt=""></a>
+        <a href="" class="socialBtn Medium">
+          <img src="./assets/images/Social/Medium@2x.png" alt=""></a>
+      </div>
+      <div class="warmly-warning">
+        <p>
+          合理安排游戏时间，请勿过度沉迷
+        </p>
+        <p>
+          Copyright ©️ 2018 HappyEOS. All Right Reserved.
+        </p>
+
+      </div>
+    </footer>
   </div>
 </template>
 
 <script>
 import { mapActions } from 'vuex'
-
-// Don't forget to tell ScatterJS which plugins you are using.
+import menu from './components/menu.vue'
 
 export default {
-  name: 'App',
+  components: {
+    'vip-menu': menu
+  },
   methods: {
     ...mapActions(['initScatter'])
   },
   created () {
     this.initScatter()
+  },
+  data () {
+    return {
+    }
   }
 }
 </script>
 
 <style>
 #app {
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  font-family: Poppins, sans-serif;
+}
+#game {
+  background:rgba(6,19,20,1);;
+  background-size: 100%;
+  background-repeat: repeat repeat;
+  display: flex;
+  flex-direction: column;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+footer {
+  padding: 1rem 1rem;
   text-align: center;
-  color: #2c3e50;
+  color: #FFFFFF;
+  background: rgba(6, 19, 20, 1);
 }
-#nav {
-  padding: 30px;
+.socialBtn {
+  border-radius: 100%;
 }
-
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
+.socialBtn img {
+  width: 50px;
 }
 </style>
