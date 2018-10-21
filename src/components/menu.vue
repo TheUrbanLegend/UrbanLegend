@@ -140,8 +140,6 @@ export default {
       }
     };
   },
-  mounted: function() {
-  },
   computed: {
     ...mapGetters(['account']),
     refUrl: function() {
@@ -154,6 +152,7 @@ export default {
     }
   },
   methods: {
+    ...mapActions(['forgetIdentity', 'initIdentity']),
     handleMenuClick(val) {
       this.$router.push({ name: val });
     },
