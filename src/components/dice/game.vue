@@ -223,6 +223,7 @@ export default {
       })
         .catch(err => {
           console.error(err)
+          this.loading = false
           alert('项目出错了，快联系开发者！')
         })
     },
