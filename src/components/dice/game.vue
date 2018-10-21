@@ -136,6 +136,9 @@ export default {
   computed: {
     ...mapState(["eos", "rpc", "balance", "seed", "referral"]),
     ...mapGetters(["account"]),
+    eosBalance() {
+      return Number(this.balance.eos.slice(0,-4))
+    },
     payOnWin() {
       if (this.choose === "small") {
         return Math.floor((98 / this.range) * this.betAmount * 10000) / 10000;
@@ -166,12 +169,12 @@ export default {
     ...mapActions(["updateBalance"]),
     amountTimes(data) {
       this.betAmount = this.betAmount * data;
-      if (this.betAmount > this.eos.balance) {
-        this.betAmount = this.eos.balance;
+      if (this.betAmount > this.eosBalance) {
+        this.betAmount = this.eosBalance;
       }
     },
     amountMax() {
-      this.betAmount = this.eos.balance;
+      this.betAmount = this.eosBalance;
     },
     changeBetAmount(data) {
       this.betAmount = Math.floor(this.betAmount * 10000) / 10000;
