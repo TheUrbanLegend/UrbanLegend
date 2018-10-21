@@ -18,5 +18,5 @@ export default {
   success_message: 'Your roll number is {0}，you win {1} EOS！',
   fail_message: 'Your roll number is {0}，you fail.',
   'Client Seed': 'Client Seed',
-  'Server Seed': 'Server Seed',
-};
+  'Server Seed': 'Server Seed'
+}

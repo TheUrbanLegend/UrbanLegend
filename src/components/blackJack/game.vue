@@ -94,113 +94,112 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
-import Deck from 'deck-of-cards';
-import Chance from 'chance';
-import utils from '../../utils.js';
+import { mapState } from 'vuex'
+import Deck from 'deck-of-cards'
+import Chance from 'chance'
+import utils from '../../utils.js'
 
 export default {
-    data() {
-      return {
-        
-        betAmount: 1,
-        isShowBetDialog: false,
-        loading: false,
-        gaming: false,
-        deck: null,
-        cardSum: 0,
-        cards: [],
-      };
-    },
-    computed: {
-      ...mapState(['balance']),
-      payOnWin: function() {
-        return '???';
-      },
-      payout: function() {
-        return '???';
-      }
-    },
-    mounted: function() {
-      setTimeout(() => {
-        this.deck = Deck();
-        this.deck.mount(document.getElementById('deck'));
+  data () {
+    return {
 
-        this.deck.flip();
-        this.deck.sort(true);
-        this.deck.bysuit();
-      }, 1000);
-    },
-    watch: {
-    },
-    methods: {
-      amountTimes(data) {
-        this.betAmount = this.betAmount * data;
-        if(this.betAmount > this.balance.eos) {
-          this.betAmount = this.balance.eos
-        }
-      },
-      amountMax() {
-        this.betAmount = this.balance.eos
-      },
-      changeBetAmount(data) {
-        this.betAmount = Math.floor(this.betAmount * 10000) / 10000;
-      },
-      initGame() {
-        this.cardSum = 0;
-        this.cards = [];
-        this.gaming = true;
-
-        this.deck.flip();
-        this.deck.shuffle();
-        this.deck.shuffle();
-      },
-      nextCard() {
-        const chance = new Chance();
-        const cardId = chance.integer({ min: 0, max: 51 });
-        const fontSize = utils.getFontSize();
-
-        if (this.cards.includes(cardId)) {
-          this.nextCard();
-          return;
-        }
-
-        this.deck.cards[cardId].animateTo({
-          delay: 0,
-          duration: 250,
-
-          x: Math.round((this.cards.length - 2.05) * 70 * fontSize / 16),
-          y: Math.round(-110 * fontSize / 16),
-          rot: 0,
-        });
-        this.deck.cards[cardId].setSide('front');
-
-        this.cards.push(cardId);
-        this.cardSum += this.deck.cards[cardId].rank;
-
-
-        if (this.cardSum === 21) {
-          this.roll_success();
-          this.gaming = false;
-        } else if (this.cardSum > 21) {
-          this.roll_fail();
-          this.gaming = false;
-        }
-      },
-      roll_success: function(ans) {
-        this.$notify({
-          title: this.$t('Congratulations!'),
-          type: 'success',
-        });
-        store.updateBalance();
-      },
-      roll_fail: function(ans) {
-        this.$notify.error({
-          title: this.$t('You fail'),
-        });
-        store.updateBalance();
-      }
+      betAmount: 1,
+      isShowBetDialog: false,
+      loading: false,
+      gaming: false,
+      deck: null,
+      cardSum: 0,
+      cards: []
     }
+  },
+  computed: {
+    ...mapState(['balance']),
+    payOnWin: function () {
+      return '???'
+    },
+    payout: function () {
+      return '???'
+    }
+  },
+  mounted: function () {
+    setTimeout(() => {
+      this.deck = Deck()
+      this.deck.mount(document.getElementById('deck'))
+
+      this.deck.flip()
+      this.deck.sort(true)
+      this.deck.bysuit()
+    }, 1000)
+  },
+  watch: {
+  },
+  methods: {
+    amountTimes (data) {
+      this.betAmount = this.betAmount * data
+      if (this.betAmount > this.balance.eos) {
+        this.betAmount = this.balance.eos
+      }
+    },
+    amountMax () {
+      this.betAmount = this.balance.eos
+    },
+    changeBetAmount (data) {
+      this.betAmount = Math.floor(this.betAmount * 10000) / 10000
+    },
+    initGame () {
+      this.cardSum = 0
+      this.cards = []
+      this.gaming = true
+
+      this.deck.flip()
+      this.deck.shuffle()
+      this.deck.shuffle()
+    },
+    nextCard () {
+      const chance = new Chance()
+      const cardId = chance.integer({ min: 0, max: 51 })
+      const fontSize = utils.getFontSize()
+
+      if (this.cards.includes(cardId)) {
+        this.nextCard()
+        return
+      }
+
+      this.deck.cards[cardId].animateTo({
+        delay: 0,
+        duration: 250,
+
+        x: Math.round((this.cards.length - 2.05) * 70 * fontSize / 16),
+        y: Math.round(-110 * fontSize / 16),
+        rot: 0
+      })
+      this.deck.cards[cardId].setSide('front')
+
+      this.cards.push(cardId)
+      this.cardSum += this.deck.cards[cardId].rank
+
+      if (this.cardSum === 21) {
+        this.roll_success()
+        this.gaming = false
+      } else if (this.cardSum > 21) {
+        this.roll_fail()
+        this.gaming = false
+      }
+    },
+    roll_success: function (ans) {
+      this.$notify({
+        title: this.$t('Congratulations!'),
+        type: 'success'
+      })
+      store.updateBalance()
+    },
+    roll_fail: function (ans) {
+      this.$notify.error({
+        title: this.$t('You fail')
+      })
+      store.updateBalance()
+    }
+  }
 }
 </script>
 

@@ -21,78 +21,78 @@
 <script>
 
 export default {
-  props: ["order"],
-  created() {
-    console.info(store);
+  props: ['order'],
+  created () {
+    console.info(store)
   },
   computed: {
-    isLogined() {
-      return store.store.account;
+    isLogined () {
+      return store.store.account
     },
-    currentUser() {
-      return store.store.account.name;
+    currentUser () {
+      return store.store.account.name
     },
-    isTheOrderOwner() {
-      return this.currentUser === this.order.owner;
+    isTheOrderOwner () {
+      return this.currentUser === this.order.owner
     }
   },
   filters: {
-    numFilter(value) {
+    numFilter (value) {
       let realVal = Number(value).toFixed(6)
       return Number(realVal)
     }
-},
+  },
   methods: {
-    async take() {
+    async take () {
       const { ask, bid } = this.order
       const memo = `take,${bid.quantity},${bid.contract},${this.order.id}`
       try {
         const contract = await store.store.scatter.contract(`${ask.contract}`)
         await contract.transfer(
-			store.store.account.name,
-			"eosotcbackup",
-			`${ask.quantity}`,
-			`${memo}`,
-           {
+          store.store.account.name,
+          'eosotcbackup',
+          `${ask.quantity}`,
+          `${memo}`,
+          {
             authorization: [`${store.store.account.name}@${store.store.account.authority}`]
-           }
+          }
         )
         this.$notify.success({
-          title: "挂单成功",
-          message: "请耐心等待"
-        });
+          title: '挂单成功',
+          message: '请耐心等待'
+        })
       } catch (error) {
         this.$notify.error({
-          title: "交易失败",
+          title: '交易失败',
           message: error.message
-        });
+        })
       }
     },
-    async cancel() {
+    async cancel () {
       try {
-        const contract = await store.store.scatter.contract("eosotcbackup")
+        const contract = await store.store.scatter.contract('eosotcbackup')
         await contract.retrieve(
-            store.store.account.name,
-            this.order.id,
-            `${this.order.ask.quantity}@${this.order.ask.contract}`,
-            {
-              authorization: [`${store.store.account.name}@${store.store.account.authority}`]
-            }
+          store.store.account.name,
+          this.order.id,
+          `${this.order.ask.quantity}@${this.order.ask.contract}`,
+          {
+            authorization: [`${store.store.account.name}@${store.store.account.authority}`]
+          }
         )
         this.$notify.success({
-          title: "取消成功",
-          message: "请耐心等待"
-        });
+          title: '取消成功',
+          message: '请耐心等待'
+        })
       } catch (error) {
         this.$notify.error({
-          title: "交易失败",
+          title: '交易失败',
           message: error.message
-        });
+        })
       }
-      //retrieve*/
+      // retrieve*/
     }
   }
-};
+}
 </script>
 
 <style scoped>
@@ -104,4 +104,3 @@ export default {
   font-weight: 400;
 }
 </style>
-

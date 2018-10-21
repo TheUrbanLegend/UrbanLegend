@@ -11,7 +11,7 @@
             <span style="margin-left: 30px;">
               要价币合约: <el-input v-model="ask_token_contract" class="bet-amount-input"></el-input>
               要价（你想要多少）: <el-input v-model="ask" placeholder="精确到小数点,如: 10.0000 EOS" class="bet-amount-input"></el-input>
-            </span>								
+            </span>
 
             <el-row class="account-info">
                 <el-col :span="8" class="account-info-section">
@@ -29,30 +29,30 @@
 
 <script>
 export default {
-    data: () => ({
-      
-      ask: "",
-      bid: "",
-      bid_token_contract: "tokendapppub",
-      ask_token_contract: "eosio.token"
-    }),
+  data: () => ({
+
+    ask: '',
+    bid: '',
+    bid_token_contract: 'tokendapppub',
+    ask_token_contract: 'eosio.token'
+  }),
   computed: {
-    getTokenDetailByRoute() {
-      const { tokenContract, tokenSymbol } = this.$route.params;
-      return { tokenContract, tokenSymbol };
+    getTokenDetailByRoute () {
+      const { tokenContract, tokenSymbol } = this.$route.params
+      return { tokenContract, tokenSymbol }
     }
   },
   methods: {
-    async ask_order() {
-      const { bid_token_contract, ask_token_contract, ask, bid } = this;
-      const memo = `ask,${ask},${ask_token_contract}`;
+    async ask_order () {
+      const { bid_token_contract, ask_token_contract, ask, bid } = this
+      const memo = `ask,${ask},${ask_token_contract}`
       try {
-        var contract = await this.store.scatter.contract(bid_token_contract);
-        console.log(contract);
-        console.log(this.store.account.name);
+        var contract = await this.store.scatter.contract(bid_token_contract)
+        console.log(contract)
+        console.log(this.store.account.name)
         await contract.transfer(
           this.store.account.name,
-          "eosotcbackup",
+          'eosotcbackup',
           `${bid}`,
           `${memo}`,
           {
@@ -60,18 +60,18 @@ export default {
               `${this.store.account.name}@${this.store.account.authority}`
             ]
           }
-        );
+        )
         this.$notify.success({
-          title: "挂单成功",
-          message: "请耐心等待"
-        });
+          title: '挂单成功',
+          message: '请耐心等待'
+        })
       } catch (error) {
         this.$notify.error({
-          title: "交易失败",
+          title: '交易失败',
           message: error.message
-        });
+        })
       }
-    },
+    }
   }
-};
+}
 </script>

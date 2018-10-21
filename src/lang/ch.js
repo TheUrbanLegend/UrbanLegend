@@ -68,5 +68,5 @@ export default {
   'Server Seed': 'Server Seed',
 
   // OTC
-  'Ask Asset': '挂单',
-};
+  'Ask Asset': '挂单'
+}

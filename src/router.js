@@ -1,8 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import diceGame from './components/dice/game.vue';
-import blackJackGame from './components/blackJack/game.vue';
-import OTCView from './components/otc';
+import diceGame from './components/dice/game.vue'
+import blackJackGame from './components/blackJack/game.vue'
+import OTCView from './components/otc'
 import slot from './components/slot/slot.vue'
 
 Vue.use(Router)
@@ -10,40 +10,41 @@ Vue.use(Router)
 export default new Router({
   routes: [
     {
-        name: 'Home',
-        path: '/',
-        redirect: {
-            name: 'Dice'
-        }
+      name: 'Home',
+      path: '/',
+      redirect: {
+        name: 'Dice'
+      }
     },
     {
-        name: 'OTCEOS',
-        path: '/otc',
-        redirect: {
-            name: 'OTC', params: {
-                tokenContract: 'eosio.token',
-                tokenSymbol: 'EOS'
-            }
-        }
-    },
-    {
+      name: 'OTCEOS',
+      path: '/otc',
+      redirect: {
         name: 'OTC',
-        path: '/otc/:tokenContract/:tokenSymbol',
-        component: OTCView,
+        params: {
+          tokenContract: 'eosio.token',
+          tokenSymbol: 'EOS'
+        }
+      }
     },
     {
-        name: 'BlackJack',
-        path: '/blackjack',
-        component: blackJackGame,
+      name: 'OTC',
+      path: '/otc/:tokenContract/:tokenSymbol',
+      component: OTCView
     },
     {
-        name: 'Dice',
-        path: '/dice',
-        component: diceGame,
-    },{
-       name: 'Slot',
-        path: '/slot',
-        component:slot
+      name: 'BlackJack',
+      path: '/blackjack',
+      component: blackJackGame
+    },
+    {
+      name: 'Dice',
+      path: '/dice',
+      component: diceGame
+    }, {
+      name: 'Slot',
+      path: '/slot',
+      component: slot
     }
-],
+  ]
 })

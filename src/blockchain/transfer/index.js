@@ -22,20 +22,19 @@ const transferTokenViaEosjs = async ({ from, to, memo = '', quantity = '0.0001 E
       name: 'transfer',
       authorization: [{
         actor: from,
-        permission: 'active',
+        permission: 'active'
       }],
       data: {
         from,
         to,
         quantity,
-        memo,
-      },
+        memo
+      }
     }]
   }, {
-      blocksBehind: 3,
-      expireSeconds: 30,
-    });
-
+    blocksBehind: 3,
+    expireSeconds: 30
+  })
 }
 
 export { transferTokenViaScatter as transferToken, transferTokenViaEosjs }

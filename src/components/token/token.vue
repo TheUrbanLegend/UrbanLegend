@@ -30,74 +30,74 @@
 </template>
 
 <script>
-import * as request from 'superagent';
+import * as request from 'superagent'
 
 export default {
-    props: ['code', 'game', 'symbol'],
-    data() {
-        this.chartSettings = {
-          legendName: {
-            '日K': '分k',
-          },
-          labelMap: {
-            '日K': '分k',
-          },
-          showDataZoom: true,
-          start: 0,
-          end: 100
-        }
-      return {
-        
-        amount: 0,
-        chartData: {
-          columns: ['time', 'open', 'close', 'lowest', 'highest'],
-          rows: [],
-        },
-      };
-    },
-    mounted: function() {
-      setTimeout(() => {
-        this.fetch();
-        store.getTokenInfo(this.code, this.symbol);
-      }, 1000);
-    },
-    methods: {
-      fetch: async function() {
-        const result = await request.get(`http://api.happyeosslot.com/api/price/${this.symbol}`);
-        this.chartData.rows = result.body;
+  props: ['code', 'game', 'symbol'],
+  data () {
+    this.chartSettings = {
+      legendName: {
+        '日K': '分k'
       },
-      buy: async function() {
-        if (!this.store.account) {
-          store.initIdentity();
-          return;
-        }
-        if (this.amount <= 0) {
-          alert(this.$t('Wrong Input'));
-          return;
-        }
-
-        const result = await this.store.scatter.transfer(this.store.account.name, this.code, `${(this.amount * this.store[this.symbol].price).toFixed(4)} EOS`, 'buy');
-        store.updateBalance();
-        store.getTokenInfo(this.code, this.symbol);
+      labelMap: {
+        '日K': '分k'
       },
-      sell: async function() {
-        if (!this.store.account) {
-          store.initIdentity();
-          return;
-        }
-        if (this.amount <= 0) {
-          alert(this.$t('Wrong Input'));
-          return;
-        }
+      showDataZoom: true,
+      start: 0,
+      end: 100
+    }
+    return {
 
-        const contract = await this.store.scatter.contract(this.code);
-        const result = await contract.transfer(this.store.account.name, this.code, `${this.amount.toFixed(4)} ${this.symbol.toUpperCase()}`, 'sell', {
-          authorization: [`${this.store.account.name}@${this.store.account.authority}`]
-        });
-        store.updateBalance();
-        store.getTokenInfo(this.code, this.symbol);
+      amount: 0,
+      chartData: {
+        columns: ['time', 'open', 'close', 'lowest', 'highest'],
+        rows: []
       }
     }
+  },
+  mounted: function () {
+    setTimeout(() => {
+      this.fetch()
+      store.getTokenInfo(this.code, this.symbol)
+    }, 1000)
+  },
+  methods: {
+    fetch: async function () {
+      const result = await request.get(`http://api.happyeosslot.com/api/price/${this.symbol}`)
+      this.chartData.rows = result.body
+    },
+    buy: async function () {
+      if (!this.store.account) {
+        store.initIdentity()
+        return
+      }
+      if (this.amount <= 0) {
+        alert(this.$t('Wrong Input'))
+        return
+      }
+
+      const result = await this.store.scatter.transfer(this.store.account.name, this.code, `${(this.amount * this.store[this.symbol].price).toFixed(4)} EOS`, 'buy')
+      store.updateBalance()
+      store.getTokenInfo(this.code, this.symbol)
+    },
+    sell: async function () {
+      if (!this.store.account) {
+        store.initIdentity()
+        return
+      }
+      if (this.amount <= 0) {
+        alert(this.$t('Wrong Input'))
+        return
+      }
+
+      const contract = await this.store.scatter.contract(this.code)
+      const result = await contract.transfer(this.store.account.name, this.code, `${this.amount.toFixed(4)} ${this.symbol.toUpperCase()}`, 'sell', {
+        authorization: [`${this.store.account.name}@${this.store.account.authority}`]
+      })
+      store.updateBalance()
+      store.getTokenInfo(this.code, this.symbol)
+    }
+  }
 }
 </script>
 

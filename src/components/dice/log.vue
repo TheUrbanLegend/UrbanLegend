@@ -16,43 +16,43 @@
             <el-col :span="4">{{log.range}} {{log.direction === 'big' ? '↑' : '↓'}}</el-col>
             <el-col :span="4">{{log.betAmount}} EOS</el-col>
             <el-col :span="4">{{log.roll}}</el-col>
-            <el-col :span="4" 
-            v-if="isWin(log)" 
+            <el-col :span="4"
+            v-if="isWin(log)"
             class="success">{{log.resultAmount}} EOS</el-col>
         </el-row>
     </div>
 </template>
 
 <script>
-import Eos from "eosjs";
-import * as request from "superagent";
+import Eos from 'eosjs'
+import * as request from 'superagent'
 
 export default {
-  data() {
+  data () {
     return {
-      logs: [],
-    };
+      logs: []
+    }
   },
-  created() {
+  created () {
     setInterval(() => {
-      this.getLogs().then();
-    }, 2000);
+      this.getLogs().then()
+    }, 2000)
   },
   methods: {
-    getLogs: async function() {
+    getLogs: async function () {
       const result = await request.get(
-        "https://api.happyeosslot.com/api/dice/logs"
-      );
-      this.logs = result.body;
+        'https://api.happyeosslot.com/api/dice/logs'
+      )
+      this.logs = result.body
     },
-    isWin(log) {
+    isWin (log) {
       return log.roll && ((log.direction === 'big' && log.roll > log.range) || (log.direction === 'small' && log.roll < log.range))
     },
-    isMyLog() {
+    isMyLog () {
 
     }
   }
-};
+}
 </script>
 
 <style scoped>

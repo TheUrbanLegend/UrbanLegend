@@ -31,7 +31,7 @@
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item command="ch"> 中文 </el-dropdown-item>
             <el-dropdown-item command="en"> English</el-dropdown-item>
-            <el-dropdown-item command="jp"> 日本語　</el-dropdown-item>
+            <el-dropdown-item command="jp"> 日本語</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
         <el-button type="primary"  @click="initIdentity()" v-if="!account"> {{$t('Login')}} </el-button>
@@ -120,90 +120,89 @@
 </template>
 
 <script>
-import { mapState, mapActions, mapGetters,mapMutations } from "vuex";
-import Chance from "chance";
-import Clipboard from "clipboard";
-import ElDropdownItem from "../../node_modules/element-ui/packages/dropdown/src/dropdown-item";
+import { mapState, mapActions, mapGetters, mapMutations } from 'vuex'
+import Clipboard from 'clipboard'
+import ElDropdownItem from '../../node_modules/element-ui/packages/dropdown/src/dropdown-item'
 
 export default {
   components: { ElDropdownItem },
-  data() {
+  data () {
     return {
       isShowFairDialog: false,
       isShowCommunityDialog: false,
       isShowReferralsDialog: false,
       isShowHowToPlayDialog: false,
       langCodeToReadableStr: {
-        ch: "中文",
-        en: "English",
-        jp: "日本語"
+        ch: '中文',
+        en: 'English',
+        jp: '日本語'
       }
-    };
+    }
   },
   computed: {
-    ...mapGetters(["account"]),
-    ...mapState(["lang"]),
-    refUrl: function() {
+    ...mapGetters(['account']),
+    ...mapState(['lang']),
+    refUrl: function () {
       return `${window.location.origin}?ref=${(this.account &&
         this.account.name) ||
-        ""}`;
+        ''}`
     },
-    currentRouteName() {
-      return this.$route.name;
+    currentRouteName () {
+      return this.$route.name
     }
   },
   methods: {
-    ...mapActions(["forgetIdentity", "initIdentity"]),
+    ...mapActions(['forgetIdentity', 'initIdentity']),
     ...mapMutations(['changeLang']),
-    handleMenuClick(val) {
-      this.$router.push({ name: val });
+    handleMenuClick (val) {
+      this.$router.push({ name: val })
     },
-    handleNetworkChange(val) {
-      this.changeNetwork(val);
+    handleNetworkChange (val) {
+      this.changeNetwork(val)
     },
-    changeLang(lang) {
-      localStorage.setItem("lang", lang);
-      this.$i18n.locale = this.lang;
+    changeLang (lang) {
+      localStorage.setItem('lang', lang)
+      this.$i18n.locale = this.lang
     },
-    navigate(brand) {
+    navigate (brand) {
       switch (brand) {
-        case "telegram":
-          window.open("//t.me/joinchat/HnyfLA9DC8cNmr6RP0tE7Q");
-          break;
-        case "twitter":
-          window.open("//twitter.com/link_idol_");
-          break;
-        case "medium":
-          window.open("//medium.com/@andoromeda");
-          break;
-        case "github":
-          window.open("//github.com/Andoromeda-Foundation");
-          break;
-        case "discord":
+        case 'telegram':
+          window.open('//t.me/joinchat/HnyfLA9DC8cNmr6RP0tE7Q')
+          break
+        case 'twitter':
+          window.open('//twitter.com/link_idol_')
+          break
+        case 'medium':
+          window.open('//medium.com/@andoromeda')
+          break
+        case 'github':
+          window.open('//github.com/Andoromeda-Foundation')
+          break
+        case 'discord':
           window.open(
-            "//discordapp.com/channels/420341255696809995/420341258184163330"
-          );
-          break;
+            '//discordapp.com/channels/420341255696809995/420341258184163330'
+          )
+          break
       }
     },
-    copy() {
-      const clipboard = new Clipboard(".copy-btn");
+    copy () {
+      const clipboard = new Clipboard('.copy-btn')
     },
-    update() {
+    update () {
       if (!this.seed) {
         this.$notify.error({
-          title: this.$t("Update seed fail")
-        });
+          title: this.$t('Update seed fail')
+        })
       } else {
-        localStorage.setItem("seed", this.seed);
+        localStorage.setItem('seed', this.seed)
         this.$notify({
-          title: this.$t("Update seed success"),
-          type: "success"
-        });
+          title: this.$t('Update seed success'),
+          type: 'success'
+        })
       }
     }
   }
-};
+}
 </script>
 
 <style>
@@ -296,8 +295,6 @@ export default {
   cursor: pointer;
 }
 </style>
-
-
 
 <style scoped>
 .game {

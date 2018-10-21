@@ -31,7 +31,7 @@
         </el-card>
       </el-col>
       <el-col :span="13">
-        <el-alert title="新手入门，不知道怎么办？" description="请加入我们的讨论QQ群：474639439" 
+        <el-alert title="新手入门，不知道怎么办？" description="请加入我们的讨论QQ群：474639439"
         type="info" show-icon style="margin-bottom: 10px"/>
         <MarketView class="market-container" :currentToken="getTokenDetailByRoute" />
       </el-col>
@@ -43,12 +43,12 @@
 </template>
 
 <script>
-import { getOrders } from "./orders";
-import OrderView from "./order";
-import getTokenLists from "./tokenLists";
-import MarketView from "./market";
-import PlaceOrderView from "./PlaceOrder";
-import ElButton from "../../../node_modules/element-ui/packages/button/src/button";
+import { getOrders } from './orders'
+import OrderView from './order'
+import getTokenLists from './tokenLists'
+import MarketView from './market'
+import PlaceOrderView from './PlaceOrder'
+import ElButton from '../../../node_modules/element-ui/packages/button/src/button'
 export default {
   components: {
     ElButton,
@@ -56,65 +56,65 @@ export default {
     MarketView,
     PlaceOrderView
   },
-  data() {
+  data () {
     return {
-      
+
       loading: false,
-      choose: "small",
+      choose: 'small',
       customTokenForm: {},
       tokenLists: [],
-      contractBySelf: "",
-      coinBySelf: ""
-    };
-  },
-  computed: {
-    getTokenDetailByRoute() {
-      const { tokenContract, tokenSymbol } = this.$route.params;
-      return { tokenContract, tokenSymbol };
+      contractBySelf: '',
+      coinBySelf: ''
     }
   },
-  async created() {
-    this.tokenLists = getTokenLists();
+  computed: {
+    getTokenDetailByRoute () {
+      const { tokenContract, tokenSymbol } = this.$route.params
+      return { tokenContract, tokenSymbol }
+    }
+  },
+  async created () {
+    this.tokenLists = getTokenLists()
   },
   watch: {
-    range(newRange, oldRange) {
+    range (newRange, oldRange) {
       if (newRange < 6) {
-        this.range = 6;
+        this.range = 6
       } else if (newRange > 93) {
-        this.range = 93;
+        this.range = 93
       }
     }
   },
   methods: {
-    queryCoin() {
-      this.jumpToDiffrentToken(this.contractBySelf, this.coinBySelf);
+    queryCoin () {
+      this.jumpToDiffrentToken(this.contractBySelf, this.coinBySelf)
     },
-    jumpToDiffrentToken(tokenContract, tokenSymbol) {
+    jumpToDiffrentToken (tokenContract, tokenSymbol) {
       this.$router.push({
-        name: "OTC",
+        name: 'OTC',
         params: {
           tokenContract,
           tokenSymbol
         }
-      });
+      })
     },
-    clickTokenRow(row, event, column) {
-      console.info(row.contract);
-      this.jumpToDiffrentToken(row.contract, row.name);
+    clickTokenRow (row, event, column) {
+      console.info(row.contract)
+      this.jumpToDiffrentToken(row.contract, row.name)
     },
-    switchView(t) {
+    switchView (t) {
       // this.currentToken = t;
     },
-    async ask_order() {
-      const { bid_token_contract, ask_token_contract, ask, bid } = this;
-      const memo = `ask,${ask},${ask_token_contract}`;
+    async ask_order () {
+      const { bid_token_contract, ask_token_contract, ask, bid } = this
+      const memo = `ask,${ask},${ask_token_contract}`
       try {
-        var contract = await this.store.scatter.contract(bid_token_contract);
-        console.log(contract);
-        console.log(this.store.account.name);
+        var contract = await this.store.scatter.contract(bid_token_contract)
+        console.log(contract)
+        console.log(this.store.account.name)
         await contract.transfer(
           this.store.account.name,
-          "eosotcbackup",
+          'eosotcbackup',
           `${bid}`,
           `${memo}`,
           {
@@ -122,31 +122,31 @@ export default {
               `${this.store.account.name}@${this.store.account.authority}`
             ]
           }
-        );
+        )
         this.$notify.success({
-          title: "挂单成功",
-          message: "请耐心等待"
-        });
+          title: '挂单成功',
+          message: '请耐心等待'
+        })
       } catch (error) {
         this.$notify.error({
-          title: "交易失败",
+          title: '交易失败',
           message: error.message
-        });
+        })
       }
     },
-    roll: function() {
-      this.loading = true;
+    roll: function () {
+      this.loading = true
       let memo = `bet ${
-        this.choose === "small" ? this.range + 100 : this.range
-      } ${this.store.seed}`;
-      const referral = this.store.referral;
+        this.choose === 'small' ? this.range + 100 : this.range
+      } ${this.store.seed}`
+      const referral = this.store.referral
       if (referral) {
-        memo += ` ${referral}`;
+        memo += ` ${referral}`
       }
       this.store.scatter
         .transfer(
           this.store.account.name,
-          "happyeosdice",
+          'happyeosdice',
           `${this.betAmount.toFixed(4)} EOS`,
           memo
         )
@@ -156,36 +156,36 @@ export default {
             this.store.scatter
               .getTableRows(
                 true,
-                "happyeosdice",
+                'happyeosdice',
                 this.store.account.name,
-                "result",
-                "0"
+                'result',
+                '0'
               )
               .then(data => {
-                const ans = data.rows[0].roll_number;
+                const ans = data.rows[0].roll_number
                 // roll点值为0-99
                 if (ans < 100) {
-                  clearInterval(r);
-                  this.loading = false;
+                  clearInterval(r)
+                  this.loading = false
                   if (
-                    (this.choose === "small" && ans < this.range) ||
-                    (this.choose === "big" && ans > this.range)
+                    (this.choose === 'small' && ans < this.range) ||
+                    (this.choose === 'big' && ans > this.range)
                   ) {
-                    this.roll_success(ans);
+                    this.roll_success(ans)
                   } else {
-                    this.roll_fail(ans);
+                    this.roll_fail(ans)
                   }
                 }
-              });
-          }, 1000);
+              })
+          }, 1000)
         })
         .catch(err => {
-          console.error(err);
-          alert("项目出错了，快联系开发者！");
-        });
+          console.error(err)
+          alert('项目出错了，快联系开发者！')
+        })
     }
   }
-};
+}
 </script>
 
 // For the sake of god, please use style scoped to avoid style collusion
@@ -203,4 +203,3 @@ export default {
   margin: 2rem auto;
 }
 </style>
-

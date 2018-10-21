@@ -1,7 +1,7 @@
 <template>
     <div>
       <el-card class="box-card">
-        <el-alert title="警告" description="留意币属合约，谨防上当受骗" 
+        <el-alert title="警告" description="留意币属合约，谨防上当受骗"
         type="warning" show-icon style="margin-bottom: 10px"/>
         <div slot="header" class="clearfix">
           <h1 class="title"> {{inExchangeFor}} </h1>
@@ -16,61 +16,61 @@
 </template>
 
 <script>
-import { getOrders } from "./orders";
-import OrderView from "./order";
+import { getOrders } from './orders'
+import OrderView from './order'
 export default {
   components: {
     OrderView
   },
   props: ['currentToken'],
-  data() {
+  data () {
     return {
-      
-      ordersList: [],
-    };
+
+      ordersList: []
+    }
   },
   computed: {
-    inExchangeFor() {
+    inExchangeFor () {
       return `${this.currentToken.tokenSymbol} 市场`
-    },
+    }
   },
-  async created() {
-    this.ordersList = await getOrders(this.currentToken.tokenContract);
+  async created () {
+    this.ordersList = await getOrders(this.currentToken.tokenContract)
   },
   watch: {
-    async currentToken(newVal, oldVal) {
+    async currentToken (newVal, oldVal) {
       this.ordersList = await getOrders(newVal.tokenContract)
     }
   },
   methods: {
-    async ask_order() {
-      const {bid_token_contract, ask_token_contract, ask, bid} = this
+    async ask_order () {
+      const { bid_token_contract, ask_token_contract, ask, bid } = this
       const memo = `ask,${ask},${ask_token_contract}`
 
       try {
-        var contract = this.store.scatter.contract(bid_token_contract);
+        var contract = this.store.scatter.contract(bid_token_contract)
         await contract.transfer(
           this.store.account.name,
-          "eosotcbackup",
+          'eosotcbackup',
           `${bid}`,
           `${memo}`,
-           {
+          {
             authorization: [`${this.store.account.name}@${this.store.account.authority}`]
-           }
-        );
+          }
+        )
         this.$notify.success({
           title: '挂单成功',
-          message: "请耐心等待"
-        });
+          message: '请耐心等待'
+        })
       } catch (error) {
         this.$notify.error({
           title: '交易失败',
           message: error.message
-        });
+        })
       }
     }
   }
-};
+}
 </script>
 
 <style scoped>

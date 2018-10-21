@@ -29,24 +29,24 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
-import menu from "./components/menu.vue";
+import { mapActions } from 'vuex'
+import menu from './components/menu.vue'
 
 export default {
   components: {
-    "vip-menu": menu
+    'vip-menu': menu
   },
-    methods: {
+  methods: {
     ...mapActions(['initScatter'])
   },
   created () {
     this.initScatter()
   },
-  data() {
+  data () {
     return {
-    };
-  },
-};
+    }
+  }
+}
 </script>
 
 <style>
