@@ -19,7 +19,7 @@
             <el-dropdown-item command="Dice">{{$t('Dice')}}</el-dropdown-item>
             <el-dropdown-item command="Slot">Slot</el-dropdown-item>
             <el-dropdown-item command="BlackJack">{{$t('BlackJack')}}</el-dropdown-item>
-            <el-dropdown-item command="OTCEOS">{{$t('OTC')}}</el-dropdown-item>
+            <!-- <el-dropdown-item command="OTCEOS">{{$t('OTC')}}</el-dropdown-item> -->
           </el-dropdown-menu>
         </el-dropdown>
       </div>
@@ -97,7 +97,7 @@
         width="30%"
         center>
         <el-input :value="refUrl" style="width: 300px;" :disabled="true"></el-input>
-        <el-button type="primary" @click="copy" class="copy-btn" :data-clipboard-text="refUrl">{{$t('Copy')}}</el-button>
+        <el-button type="primary" class="copy-btn" :data-clipboard-text="refUrl">{{$t('Copy')}}</el-button>
         <p>{{$t('referrals-1')}}</p>
       </el-dialog>
 
@@ -122,10 +122,14 @@
 <script>
 import { mapState, mapActions, mapGetters, mapMutations } from 'vuex'
 import Clipboard from 'clipboard'
-import ElDropdownItem from '../../node_modules/element-ui/packages/dropdown/src/dropdown-item'
+
+const clipboard = new Clipboard('.copy-btn')
+clipboard.on('error', function (e) {
+  console.error('Action:', e.action)
+  console.error('Trigger:', e.trigger)
+})
 
 export default {
-  components: { ElDropdownItem },
   data () {
     return {
       isShowFairDialog: false,
@@ -184,9 +188,6 @@ export default {
           )
           break
       }
-    },
-    copy () {
-      const clipboard = new Clipboard('.copy-btn')
     },
     update () {
       if (!this.seed) {
