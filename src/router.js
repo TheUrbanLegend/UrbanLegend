@@ -1,8 +1,5 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import diceGame from './components/dice/game.vue'
-import blackJackGame from './components/blackJack/game.vue'
-import slot from './components/slot/slot.vue'
 
 Vue.use(Router)
 
@@ -15,19 +12,19 @@ export default new Router({
         name: 'Dice'
       }
     },
-    {
-      name: 'BlackJack',
-      path: '/blackjack',
-      component: blackJackGame
-    },
+    // {
+    //   name: 'BlackJack',
+    //   path: '/blackjack',
+    //   component: import(/* webpackChunkName: "BlackJack" */ './components/blackJack/game.vue')
+    // },
     {
       name: 'Dice',
       path: '/dice',
-      component: diceGame
+      component: () => import(/* webpackChunkName: "dice" */ './components/dice/game.vue')
     }, {
       name: 'Slot',
       path: '/slot',
-      component: slot
+      component: () => import(/* webpackChunkName: "slot" */ './components/slot/slot.vue')
     }
   ]
 })
