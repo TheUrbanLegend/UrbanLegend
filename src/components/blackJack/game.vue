@@ -113,14 +113,14 @@ export default {
   },
   computed: {
     ...mapState(['balance']),
-    payOnWin() {
+    payOnWin () {
       return '???'
     },
-    payout() {
+    payout () {
       return '???'
     }
   },
-  mounted() {
+  mounted () {
     setTimeout(() => {
       this.deck = Deck()
       this.deck.mount(document.getElementById('deck'))
@@ -185,14 +185,14 @@ export default {
         this.gaming = false
       }
     },
-    roll_success(ans) {
+    roll_success (ans) {
       this.$notify({
         title: this.$t('Congratulations!'),
         type: 'success'
       })
       this.updateBalance()
     },
-    roll_fail(ans) {
+    roll_fail (ans) {
       this.$notify.error({
         title: this.$t('You fail')
       })
