@@ -18,7 +18,7 @@
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item command="Dice">{{$t('Dice')}}</el-dropdown-item>
             <el-dropdown-item command="Slot">Slot</el-dropdown-item>
-            <el-dropdown-item command="BlackJack">{{$t('BlackJack')}}</el-dropdown-item>
+            <!-- <el-dropdown-item command="BlackJack">{{$t('BlackJack')}}</el-dropdown-item> -->
             <!-- <el-dropdown-item command="OTCEOS">{{$t('OTC')}}</el-dropdown-item> -->
           </el-dropdown-menu>
         </el-dropdown>

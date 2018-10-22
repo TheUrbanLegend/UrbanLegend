@@ -97,7 +97,6 @@
 import { mapState } from 'vuex'
 import Deck from 'deck-of-cards'
 import Chance from 'chance'
-import utils from '../../utils.js'
 
 export default {
   data () {
@@ -114,14 +113,14 @@ export default {
   },
   computed: {
     ...mapState(['balance']),
-    payOnWin: function () {
+    payOnWin() {
       return '???'
     },
-    payout: function () {
+    payout() {
       return '???'
     }
   },
-  mounted: function () {
+  mounted() {
     setTimeout(() => {
       this.deck = Deck()
       this.deck.mount(document.getElementById('deck'))
@@ -186,18 +185,18 @@ export default {
         this.gaming = false
       }
     },
-    roll_success: function (ans) {
+    roll_success(ans) {
       this.$notify({
         title: this.$t('Congratulations!'),
         type: 'success'
       })
-      store.updateBalance()
+      this.updateBalance()
     },
-    roll_fail: function (ans) {
+    roll_fail(ans) {
       this.$notify.error({
         title: this.$t('You fail')
       })
-      store.updateBalance()
+      this.updateBalance()
     }
   }
 }
