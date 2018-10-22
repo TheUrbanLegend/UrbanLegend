@@ -171,22 +171,20 @@
 </template>
 <script>
 /* eslint-disable */
-import { mapState, mapActions, mapGetters } from 'vuex'
-import axios from 'axios'
-import { transferTokenViaEosjs, singleContractCall } from '@/blockchain'
-import { createHexRandom } from './helper'
-import { network } from '@/config'
-// import ElButton from '../../../node_modules/element-ui/packages/button/src/button'
+import { mapState, mapActions, mapGetters } from "vuex";
+import axios from "axios";
+import { transferTokenViaEosjs, singleContractCall } from "@/blockchain";
+import { createHexRandom } from "./helper";
+import { network } from "@/config";
 
 export default {
-  // components: { ElButton },
-  data () {
+  data() {
     return {
       requiredFields: null,
       eos: null,
       actions: [],
       last_bet: null,
-      bet_input: '1.0000',
+      bet_input: "1.0000",
       index: 0, // 当前转动到哪个位置，起点位置
       count: 28, // 总共有多少个位置
       speed: 20, // 初始转动速度
@@ -197,215 +195,214 @@ export default {
       prize: -1, // 中奖位置
       running: false, // 正在抽奖
       eop: 1 // 经营状况系数
-    }
+    };
   },
-  created () {
-    this.getCurrentBalance()
+  created() {
+    this.getCurrentBalance();
   },
   methods: {
-    change_bet () {
-      this.play_se('se_click')
-      var new_bet = parseFloat(prompt('赌多少EOS？'))
+    change_bet() {
+      this.play_se("se_click");
+      var new_bet = parseFloat(prompt("赌多少EOS？"));
       //            var new_bet = prompt("赌多少EOS？");
       // Check new bet
       if (new_bet > 0) {
-        this.bet_input = Number(new_bet).toFixed(4)
+        this.bet_input = Number(new_bet).toFixed(4);
       }
     },
-    getCurrentBalance () {
-      this.getCurrentEop()
+    getCurrentBalance() {
+      this.getCurrentEop();
     },
-    async getCurrentEop () {
+    async getCurrentEop() {
       var happyeosslotBalance = await this.rpc.get_currency_balance(
-        'eosio.token',
-        'happyeosslot'
-      )
+        "eosio.token",
+        "happyeosslot"
+      );
       var happyeosslot_true_balance = await this.rpc.get_table_rows({
-        json: 'true',
-        code: 'happyeosslot',
-        scope: 'happyeosslot',
+        json: "true",
+        code: "happyeosslot",
+        scope: "happyeosslot",
         limit: 10,
-        table: 'market'
-      })
-      happyeosslotBalance = happyeosslotBalance[0].split(' ', 1)[0]
+        table: "market"
+      });
+      happyeosslotBalance = happyeosslotBalance[0].split(" ", 1)[0];
       // this.eop = happyeosslot_true_balance;
       happyeosslot_true_balance = happyeosslot_true_balance.rows[0].deposit.balance.split(
-        ' ',
+        " ",
         1
-      )[0]
-      this.eop = happyeosslotBalance / (happyeosslot_true_balance - 1250)
+      )[0];
+      this.eop = happyeosslotBalance / (happyeosslot_true_balance - 1250);
       // this.eop = Number(this.eop).toFixed(4);
 
-      return this.eop
+      return this.eop;
     },
-    make_deposit (event) {
-      this.play_se('se_click')
-      var new_deposit = prompt('购买多少EOS的股份？')
+    make_deposit(event) {
+      this.play_se("se_click");
+      var new_deposit = prompt("购买多少EOS的股份？");
       // Check new deposit
       if (new_deposit > 0) {
         if (this.isPc()) {
-          this.deposit(new_deposit)
+          this.deposit(new_deposit);
         } else {
         }
       }
     },
-    make_withdraw (event) {
-      this.play_se('se_click')
-      var new_withdraw = prompt('出售多少HPY（股份）？')
+    make_withdraw(event) {
+      this.play_se("se_click");
+      var new_withdraw = prompt("出售多少HPY（股份）？");
       // Check new withdraw
       if (new_withdraw > 0) {
-        this.withdraw(new_withdraw)
+        this.withdraw(new_withdraw);
       }
     },
-    get_roll_result () {
+    get_roll_result() {
       this.rpc
         .get_table_rows({
-          json: 'true',
-          code: 'happyeosslot',
+          json: "true",
+          code: "happyeosslot",
           scope: this.account.name,
           limit: 10,
-          table: 'result'
+          table: "result"
         })
         .then(data => {
-          console.log(data)
-          var result = data.rows[0].roll_number
-          var rate_100 = 25
-          var rate_50 = [11, 24]
-          var rate_20 = [6, 16, 21]
-          var rate_10 = [1, 10, 26]
-          var rate_5 = [3, 13, 18, 22]
-          var rate_2 = [2, 8, 17, 28]
-          var rate_0_1 = [5, 9, 12, 14, 19]
-          var rate_0_0_1 = [4, 7, 15, 20, 23, 27]
+          console.log(data);
+          var result = data.rows[0].roll_number;
+          var rate_100 = 25;
+          var rate_50 = [11, 24];
+          var rate_20 = [6, 16, 21];
+          var rate_10 = [1, 10, 26];
+          var rate_5 = [3, 13, 18, 22];
+          var rate_2 = [2, 8, 17, 28];
+          var rate_0_1 = [5, 9, 12, 14, 19];
+          var rate_0_0_1 = [4, 7, 15, 20, 23, 27];
 
           if (this.running) {
-            var random = Math.random()
+            var random = Math.random();
             // console.log(random);
             if (result >= 10000) {
-              this.stop_at(rate_100)
+              this.stop_at(rate_100);
             } else if (result >= 5000) {
-              this.stop_at(rate_50[Math.floor(random) * 2])
+              this.stop_at(rate_50[Math.floor(random) * 2]);
             } else if (result >= 2000) {
-              this.stop_at(rate_20[Math.floor(random * 3)])
+              this.stop_at(rate_20[Math.floor(random * 3)]);
             } else if (result >= 1000) {
-              this.stop_at(rate_10[Math.floor(random * 3)])
+              this.stop_at(rate_10[Math.floor(random * 3)]);
             } else if (result >= 500) {
-              this.stop_at(rate_5[Math.floor(random * 4)])
+              this.stop_at(rate_5[Math.floor(random * 4)]);
             } else if (result >= 200) {
-              this.stop_at(rate_2[Math.floor(random * 4)])
+              this.stop_at(rate_2[Math.floor(random * 4)]);
             } else if (result >= 10) {
-              this.stop_at(rate_0_1[Math.floor(random * 5)])
+              this.stop_at(rate_0_1[Math.floor(random * 5)]);
             } else if (result >= 1) {
-              this.stop_at(rate_0_0_1[Math.floor(random * 6)])
+              this.stop_at(rate_0_0_1[Math.floor(random * 6)]);
             } else {
-              this.result_timer = setTimeout(this.get_roll_result, 100) // 循环调用
+              this.result_timer = setTimeout(this.get_roll_result, 100); // 循环调用
             }
           }
         })
         .catch(err => {
-          alert(err.toString())
-        })
+          alert(err.toString());
+        });
     },
-    deposit (amount) {
-      this.play_se('se_click')
-      amount = Number(amount).toFixed(4)
+    async deposit(amount) {
+      this.play_se("se_click");
+      amount = Number(amount).toFixed(4);
       // console.log(amount);
-      transferTokenViaEosjs({
-        from: this.account.name,
-        to: 'happyeosslot',
-        memo: 'buy',
-        quantity: amount + ' EOS'
-      })
-        .then(() => {
-          this.play_se('se_buy')
-          this.getCurrentBalance()
-          alert('充值成功')
-        })
-        .catch(err => {
-          alert(err.toString())
-        })
-    },
-    async withdraw (amount) {
-      // @todo: EOSJS2 actions maybe?
-      this.play_se('se_click')
-      amount = Number(amount).toFixed(4)
       try {
-        this.play_se('se_withdraw')
+        await transferTokenViaEosjs({
+          from: this.account.name,
+          to: "happyeosslot",
+          memo: "buy",
+          quantity: amount + " EOS"
+        });
+        this.play_se("se_buy");
+        this.getCurrentBalance();
+        alert("充值成功");
+      } catch (err) {
+        alert(err.toString());
+      }
+    },
+    async withdraw(amount) {
+      // @todo: EOSJS2 actions maybe?
+      this.play_se("se_click");
+      amount = Number(amount).toFixed(4);
+      try {
+        this.play_se("se_withdraw");
         await singleContractCall({
-          contractAccount: 'happyeosslot',
-          actionName: 'sell',
-          actionData: { account: this.account.name, hpy: amount + ' HPY' },
+          contractAccount: "happyeosslot",
+          actionName: "sell",
+          actionData: { account: this.account.name, hpy: amount + " HPY" },
           authorization: [
             {
               actor: this.account.name,
               permission: this.account.authority
             }
           ]
-        })
-        this.getCurrentBalance()
+        });
+        this.getCurrentBalance();
         this.$notify({
-          title: '卖出成功',
-          message: 'EOS 已到账',
-          type: 'success'
-        })
+          title: "卖出成功",
+          message: "EOS 已到账",
+          type: "success"
+        });
       } catch (error) {
-        console.error(error)
+        console.error(error);
         this.$notify({
-          title: '卖出失败',
+          title: "卖出失败",
           message: `错误原因： ${JSON.stringify(error)}`,
-          type: 'error'
-        })
+          type: "error"
+        });
       }
     },
-    roll () {
-      var index = this.index
-      var count = this.count
-      index += 1
+    roll() {
+      var index = this.index;
+      var count = this.count;
+      index += 1;
       if (index > count) {
-        index -= count
+        index -= count;
       }
-      this.index = index
-      return false
+      this.index = index;
+      return false;
     },
-    start_roll () {
-      this.play_se('se_click')
-      if (this.running) return
-      var amount = Number(this.bet_input).toFixed(4)
-      if (this.bet_input === '') {
-        amount = '1.0000'
+    start_roll() {
+      this.play_se("se_click");
+      if (this.running) return;
+      var amount = Number(this.bet_input).toFixed(4);
+      if (this.bet_input === "") {
+        amount = "1.0000";
       }
       transferTokenViaEosjs({
         from: this.account.name,
-        to: 'happyeosslot',
+        to: "happyeosslot",
         memo: `bet ${createHexRandom()}`,
-        quantity: amount + ' EOS'
+        quantity: amount + " EOS"
       })
         .then(() => {
-          this.play_se('se_startrolling')
-          this.running = true
-          this.last_bet = amount
-          this.roll_loop()
-          this.get_roll_result()
+          this.play_se("se_startrolling");
+          this.running = true;
+          this.last_bet = amount;
+          this.roll_loop();
+          this.get_roll_result();
         })
         .catch(err => {
-          alert(err.toString())
-        })
+          alert(err.toString());
+        });
     },
-    roll_loop () {
-      this.play_se('se_rolling')
-      this.times += 1
-      this.roll()
+    roll_loop() {
+      this.play_se("se_rolling");
+      this.times += 1;
+      this.roll();
       if (this.times > this.cycle + 10 && this.prize === this.index) {
-        clearTimeout(this.timer)
-        this.prize = -1
-        this.times = 0
-        this.running = false
+        clearTimeout(this.timer);
+        this.prize = -1;
+        this.times = 0;
+        this.running = false;
       } else {
         if (this.times < this.cycle) {
           if (this.speed > 200) {
-            this.speed -= 100
+            this.speed -= 100;
           } else {
-            this.speed -= 10
+            this.speed -= 10;
           }
         } else {
           if (this.prize !== -1) {
@@ -414,56 +411,56 @@ export default {
               ((this.prize === 1 && this.index === this.count) ||
                 this.prize === this.index + 1)
             ) {
-              this.speed += 110
+              this.speed += 110;
             } else {
-              this.speed += 20
+              this.speed += 20;
             }
           }
         }
         if (this.speed < 40) {
-          this.speed = 40
+          this.speed = 40;
         }
         if (this.speed > 500) {
-          this.speed = 500
+          this.speed = 500;
         }
-        this.timer = setTimeout(this.roll_loop, this.speed) // 循环调用
+        this.timer = setTimeout(this.roll_loop, this.speed); // 循环调用
       }
     },
-    async fetch_action () {
+    async fetch_action() {
       // Sorry SuperONE, EOSAsia have the BETTER get_actions API than yours,
       const { data } = await axios({
-        method: 'post',
-        url: 'https://geo.eosasia.one/v1/history/get_actions',
-        headers: { 'content-type': 'thislication/x-www-form-urlencoded' },
-        data: { account_name: 'happyeosslot', pos: -1, offset: -300 }
-      })
+        method: "post",
+        url: "https://geo.eosasia.one/v1/history/get_actions",
+        headers: { "content-type": "thislication/x-www-form-urlencoded" },
+        data: { account_name: "happyeosslot", pos: -1, offset: -300 }
+      });
       this.actions = data.actions
-        .map((action) => action['action_trace'].act.data)
-        .filter(action => action.quantity) // No Reveal Blank Data will be shown
+        .map(action => action["action_trace"].act.data)
+        .filter(action => action.quantity); // No Reveal Blank Data will be shown
       // alert(res)
     },
-    stop_at (stopPosition) {
+    stop_at(stopPosition) {
       if (this.prize === -1) {
-        clearTimeout(this.result_timer)
-        this.prize = stopPosition
-        this.getCurrentBalance()
+        clearTimeout(this.result_timer);
+        this.prize = stopPosition;
+        this.getCurrentBalance();
       }
     },
-    isPc () {
+    isPc() {
       // 移动端PC端判断
-      return !/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)
+      return !/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent);
     },
-    play_se (id) {
-      var SEAudio = document.getElementById(id)
-      SEAudio.currentTime = 0
-      SEAudio.play()
+    play_se(id) {
+      var SEAudio = document.getElementById(id);
+      SEAudio.currentTime = 0;
+      SEAudio.play();
     }
   },
   computed: {
-    ...mapState(['rpc', 'eos', 'balance']),
-    ...mapGetters(['account'])
+    ...mapState(["rpc", "eos", "balance"]),
+    ...mapGetters(["account"])
   }
-}
+};
 </script>
 <style scoped>
 @import "../../assets/css/cube.css";
