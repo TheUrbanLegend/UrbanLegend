@@ -24,7 +24,6 @@
 </template>
 
 <script>
-import Eos from 'eosjs'
 import * as request from 'superagent'
 
 export default {

@@ -61,10 +61,10 @@
         <el-input v-model="seed" :placeholder="$t('Enter Your Custom Seed')" style="width: 300px;"></el-input>
         <el-button type="primary" @click="update()">{{$t('Update_Client_Seed')}}</el-button>
 
-        <el-input v-model="server_seed" :placeholder="$t('Server Seed')" style="width: 300px;"></el-input>
+        <!-- <el-input v-model="server_seed" :placeholder="$t('Server Seed')" style="width: 300px;"></el-input> -->
         <el-button type="primary" @click="pull()">{{$t('Pull_Server_Seed')}}</el-button>
 
-        <el-input v-model="random_number" :placeholder="$t('Random Number')" style="width: 300px;"></el-input>
+        <!-- <el-input v-model="random_number" :placeholder="$t('Random Number')" style="width: 300px;"></el-input> -->
       </el-dialog>
 
       <el-dialog
@@ -145,7 +145,7 @@ export default {
   },
   computed: {
     ...mapGetters(['account']),
-    ...mapState(['lang']),
+    ...mapState(['lang', 'seed']),
     refUrl: function () {
       return `${window.location.origin}?ref=${(this.account &&
         this.account.name) ||

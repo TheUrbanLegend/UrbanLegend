@@ -115,7 +115,7 @@
 
 <script>
 import { transferTokenViaEosjs } from '@/blockchain'
-import { mapState, mapActions, mapMutations, mapGetters } from 'vuex'
+import { mapState, mapActions, mapGetters } from 'vuex'
 // import tokenDisplay from '@/components/token/token.vue';
 import log from './log.vue'
 
